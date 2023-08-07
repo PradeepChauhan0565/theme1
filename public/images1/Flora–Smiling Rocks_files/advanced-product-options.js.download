@@ -1,0 +1,13 @@
+(function (doc, nameAttr, basePath) {
+  const mwsApoScript = doc.querySelector('script[src*="advanced-product-options.js"]');
+  const mwsApoScriptSrc = mwsApoScript.getAttribute('src');
+  const mwsApoVersion = typeof mwsApoScriptSrc.split('?')[1] === "undefined"
+    ? "v=" + mwsApoScriptSrc.match(/\d+\.\d+\.\d+/)[0]
+    : mwsApoScriptSrc.split('?')[1];
+  const mwsApoNewElm = doc.createElement(nameAttr);
+  const mwsApoPartQri = doc.cookie.indexOf("mw-develop") > -1 ? "&t=" + new Date().getTime() : "";
+  const mwsApoExistScript = doc.getElementsByTagName(nameAttr)[0];
+  mwsApoNewElm.async = 1;
+  mwsApoNewElm.src = basePath + '?' + mwsApoVersion + mwsApoPartQri;
+  mwsApoExistScript.parentNode.insertBefore(mwsApoNewElm, mwsApoExistScript);
+})(document, 'script', '//apo-front.mageworx.com/bundle.js');
