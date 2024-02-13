@@ -181,16 +181,17 @@ class FeaturedCollectionsComponent extends Component
         foreach ($collections as $collections) {
             $this->status[$collections->id] = $collections->status;
         }
-
+        $table = new FeaturedCollections();
+        $columns = $table->getTableColumns('featured_collections');
 
         // $columns = $table->getTableColumns('urls');
         return view('livewire.featured-collections-component', [
-            'collections' => FeaturedCollections::orderBy('id', 'asc')
-                // 'urls' => HeroBanner::when($this->search, function ($q) use ($columns) {
-                //     foreach ($columns as $column) {
-                //         $q->orWhere($column, 'LIKE', $this->search . '%');
-                //     }
-                // })
+            // 'collections' => FeaturedCollections::orderBy('id', 'asc')
+            'collections' => FeaturedCollections::when($this->search, function ($q) use ($columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', $this->search . '%');
+                }
+            })->orderBy($this->sort_column, $this->sort)
                 // ->orWhereHas('company', function ($q) {
                 //     $q->where('company_code', 'LIKE', '%' . $this->search . '%');
                 // })
@@ -198,10 +199,10 @@ class FeaturedCollectionsComponent extends Component
                 //     $q->where('department_code', 'LIKE', '%' . $this->search . '%');
                 // })
                 // ->orderBy($this->sort_column, $this->sort)
-                ->when($this->search, function ($qs) {
-                    $qs->where('image_title', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('order_by', 'LIKE', '%' . $this->search . '%');
-                })
+                // ->when($this->search, function ($qs) {
+                //     $qs->where('image_title', 'LIKE', '%' . $this->search . '%')
+                //         ->orWhere('order_by', 'LIKE', '%' . $this->search . '%');
+                // })
                 ->paginate(15),
         ]);
     }

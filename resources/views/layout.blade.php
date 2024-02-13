@@ -6,12 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    {{-- ---------------bootstrap------------ --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    {{-- ---------------jquery------------ --}}
-    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
-        crossorigin="anonymous"></script>
+
     {{-- ---------------font-awesome------------ --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
@@ -19,40 +14,49 @@
     {{-- ---------------font-family------------ --}}
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@200;300;400;500&display=swap"
         rel="stylesheet">
+
+    {{-- ---------------jquery------------ --}}
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+        crossorigin="anonymous"></script>
+
+    {{-- ---------------toastr------------ --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    {{-- ---------------bootstrap------------ --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrapm.css') }}">
+
+    {{-- ---------------Style------------ --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/allstyle.css') }}">
+
+    {{-- ---------------livewire------------ --}}
     <script src="//unpkg.com/alpinejs" defer></script>
 
     @livewireStyles
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+            text-decoration: none;
+            /* font-family:  Helvetica Neue,Helvetica,Arial,sans-serif; */
+            font-family: 'Public Sans', sans-serif;
+            color: #071d49;
+        }
+    </style>
 </head>
 
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-        text-decoration: none;
-        /* font-family:  Helvetica Neue,Helvetica,Arial,sans-serif; */
-        font-family: 'Public Sans', sans-serif;
-        color: #071d49;
 
-
-    }
-</style>
 
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
-    </script>
+
     @php
         $contacts = App\Models\ContactDetails::first();
-        $categories = App\Models\Category::orderBy('order_by', 'asc')
-            ->where('status', 1)
-            ->get();
-        $socials = App\Models\SocialMedia::orderBy('order_by', 'asc')
-            ->where('status', 1)
-            ->get();
-        
+        $categories = App\Models\Category::orderBy('order_by', 'asc')->where('status', 1)->get();
+        $socials = App\Models\SocialMedia::orderBy('order_by', 'asc')->where('status', 1)->get();
     @endphp
+
     @include('header')
     @yield('content')
     @include('footer')
@@ -75,8 +79,6 @@
                                 style=" color:#071d49;">
 
                                 <div class="">
-
-
                                     <div>
                                         <div class="text-center">
                                             <img src="{{ asset('public/assets/img/logo/kama-logo-blue.png') }}"
@@ -128,10 +130,16 @@
     @endphp
     {{-- ---------------scrollToTop------------ --}}
     <button id="scroll_top" onclick="scrollToTop()" class="position-fixed"
-        style="display: none; z-index:99;bottom:10px; right:10px; border-radius:50%; font-size: 22px; width:50px; height:50px; background-color:#071d49; border:none;">
+        style="display: none; z-index:99;bottom:50px; right:10px; border-radius:50%; font-size: 22px; width:50px; height:50px; background-color:#071d49; border:none;">
         <i class="fa-solid fa-arrow-up text-white"></i>
     </button>
 
+
+
+    {{-- ---------------toastr------------ --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    {{-- ---------------bootstrap------------ --}}
+    <script src="{{ asset('js/bootstrapm.js') }}"></script>
 
     <script>
         function scrollToTop() {
@@ -149,10 +157,76 @@
 
     <script>
         $(document).ready(function() {
-            $("#popupModal").modal('show');
+            setTimeout(function() {
+                $('#popupModal').modal('show');
+            }, 10000);
+
+            isPrevented = false;
+            toastr.options = {
+                closeButton: true,
+                "progressBar": true,
+                onHidden: () => {
+                    if (isPrevented) {
+                        return false;
+                    } else {
+                        //Sent result to server;
+                    }
+                },
+                onCloseClick: () => {
+                    isPrevented = true
+                }
+            }
+
+            @if (Session::has('success'))
+                toastr.success("{{ Session::get('success') }}");
+            @endif
+            @if (Session::has('info'))
+                toastr.info("{{ Session::get('info') }}");
+            @endif
+            @if (Session::has('warning'))
+                toastr.warning("{{ Session::get('warning') }}");
+            @endif
+            @if (Session::has('error'))
+                toastr.error("{{ Session::get('error') }}");
+            @endif
         });
     </script>
 
+    <style>
+        .toast-success {
+            /* color: #fff;s */
+            background-color: #61cc41 !important;
+        }
+    </style>
+    <script>
+        // Toastify({
+        //     text: 'testing succesfull tested this',
+        //     duration: 3000,
+        //     style: {
+        //         background: "linear-gradient(to right, #5e82b8,#41cc77)"
+        //     }
+
+        // }).showToast();
+
+
+        // @if (Session::has('alert-success'))
+        //     Toastify({
+        //         text: "Session::get('alert-success')",
+        //         duration: 3000,
+        //         style: {
+        //             background: "linear-gradient(to right, #00b09b,#96c93d)"
+        //         }
+        //     }).showToast();
+        // @elseif (Session::has('alert-warnnig'))
+        //     Toastify({
+        //         text: "Session::get('alert-success')",
+        //         duration: 3000,
+        //         style: {
+        //             background: "linear-gradient(to right, #00b09b,#96c93d)"
+        //         }
+        //     }).showToast();
+        // @endif
+    </script>
 </body>
 
 </html>

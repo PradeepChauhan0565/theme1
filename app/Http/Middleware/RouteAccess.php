@@ -21,15 +21,15 @@ class RouteAccess
      */
     public function handle(Request $request, Closure $next)
     {
-        // return $next($request);
-        
+        return $next($request);
+
         if (Auth::check() && Auth::user()->id == 1) {
-            return $next($request);          
+            return $next($request);
         } else {
-            if ($request->is('/') || $request->is('login') || $request->is('register') || $request->is('logout')) {
-                
-                return $request->is('register') ? abort(403, 'Unauthorized access.') : $next($request);
-            } elseif (Auth::check()) {               
+            if ($request->is('shop/*')  || $request->is('/') || $request->is('login') || $request->is('register') || $request->is('logout')) {
+
+                return  $next($request);
+            } elseif (Auth::check()) {
                 if (str_contains($request->path(), 'livewire/message')) {
                     return $next($request);
                 } else {

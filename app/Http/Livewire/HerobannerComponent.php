@@ -35,9 +35,7 @@ class HerobannerComponent extends Component
     public $component_name;
 
 
-    protected $rules = [
-        'hb_image' => 'image|mimes:png,jpg,gif,webp,jpeg',
-    ];
+
 
     protected $listeners = [
         'getTableId'
@@ -120,6 +118,11 @@ class HerobannerComponent extends Component
 
     public function update()
     {
+        if (empty($this->old_hb_image)) {
+            HeroBanner::where('id', $this->banner_id)->update([
+                'hb_image' => null,
+            ]);
+        }
         $name = null;
         $image_path = null;
         if ($this->hb_image) {
@@ -132,6 +135,7 @@ class HerobannerComponent extends Component
             }
         }
 
+
         HeroBanner::find($this->banner_id)->update([
             'hb_image' => $name,
             'image_path' => $image_path,
@@ -142,7 +146,14 @@ class HerobannerComponent extends Component
         ]);
         $this->dispatchBrowserEvent('livewireUpdated');
     }
-
+    public function removepreview()
+    {
+        $this->hb_image = null;
+    }
+    public function removeold()
+    {
+        $this->old_hb_image = null;
+    }
     public function view($disabled, $id)
     {
         $this->delete = null;
@@ -192,15 +203,15 @@ class HerobannerComponent extends Component
         foreach ($banners as $banners) {
             $this->status[$banners->id] = $banners->status;
         }
-        $table = new url();
-        $columns = $table->getTableColumns('urls');
+        $table = new HeroBanner();
+        $columns = $table->getTableColumns('hero_banners');
         return view('livewire.herobanner-component', [
             // 'h_banners' => HeroBanner::orderBy('id', 'asc')
             'h_banners' => HeroBanner::when($this->search, function ($q) use ($columns) {
                 foreach ($columns as $column) {
                     $q->orWhere($column, 'LIKE', $this->search . '%');
                 }
-            })
+            })->orderBy($this->sort_column, $this->sort)
                 // ->orWhereHas('company', function ($q) {
                 //     $q->where('company_code', 'LIKE', '%' . $this->search . '%');
                 // })
@@ -208,10 +219,10 @@ class HerobannerComponent extends Component
                 //     $q->where('department_code', 'LIKE', '%' . $this->search . '%');
                 // })
                 // ->orderBy($this->sort_column, $this->sort)
-                ->when($this->search, function ($qs) {
-                    $qs->where('image_title', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('order_by', 'LIKE', '%' . $this->search . '%');
-                })->orderBy($this->sort_column, $this->sort)
+                // ->when($this->search, function ($qs) {
+                //     $qs->where('image_title', 'LIKE', '%' . $this->search . '%')
+                //         ->orWhere('order_by', 'LIKE', '%' . $this->search . '%');
+                // })
                 ->paginate(15),
         ]);
     }

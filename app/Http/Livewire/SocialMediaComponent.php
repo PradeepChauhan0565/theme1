@@ -159,14 +159,15 @@ class SocialMediaComponent extends Component
         }
 
 
-        // $columns = $table->getTableColumns('urls');
+        $table = new SocialMedia();
+        $columns = $table->getTableColumns('social_media');
         return view('livewire.social-media-component', [
-            'socials' => SocialMedia::orderBy('id', 'asc')
-                // 'urls' => SocialMedia::when($this->search, function ($q) use ($columns) {
-                //     foreach ($columns as $column) {
-                //         $q->orWhere($column, 'LIKE', $this->search . '%');
-                //     }
-                // })
+            // 'socials' => SocialMedia::orderBy('id', 'asc')
+            'socials' => SocialMedia::when($this->search, function ($q) use ($columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', $this->search . '%');
+                }
+            })->orderBy($this->sort_column, $this->sort)
                 // ->orWhereHas('company', function ($q) {
                 //     $q->where('company_code', 'LIKE', '%' . $this->search . '%');
                 // })
@@ -174,10 +175,10 @@ class SocialMediaComponent extends Component
                 //     $q->where('department_code', 'LIKE', '%' . $this->search . '%');
                 // })
                 // ->orderBy($this->sort_column, $this->sort)
-                ->when($this->search, function ($qs) {
-                    $qs->where('name', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('order_by', 'LIKE', '%' . $this->search . '%');
-                })
+                // ->when($this->search, function ($qs) {
+                //     $qs->where('name', 'LIKE', '%' . $this->search . '%')
+                //         ->orWhere('order_by', 'LIKE', '%' . $this->search . '%');
+                // })
                 ->paginate(15),
         ]);
     }

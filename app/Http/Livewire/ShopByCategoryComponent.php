@@ -187,15 +187,16 @@ class ShopByCategoryComponent extends Component
         foreach ($shops as $shops) {
             $this->status[$shops->id] = $shops->status;
         }
-
+        $table = new ShopByCategory();
+        $columns = $table->getTableColumns('shop_by_categories');
         // $columns = $table->getTableColumns('urls');
         return view('livewire.shop-by-category-component', [
-            'sbc_images' => ShopByCategory::orderBy('id', 'asc')
-                // 'urls' => HeroBanner::when($this->search, function ($q) use ($columns) {
-                //     foreach ($columns as $column) {
-                //         $q->orWhere($column, 'LIKE', $this->search . '%');
-                //     }
-                // })
+            // 'sbc_images' => ShopByCategory::orderBy('id', 'asc')
+            'sbc_images' => ShopByCategory::when($this->search, function ($q) use ($columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', $this->search . '%');
+                }
+            })->orderBy($this->sort_column, $this->sort)
                 // ->orWhereHas('company', function ($q) {
                 //     $q->where('company_code', 'LIKE', '%' . $this->search . '%');
                 // })
@@ -203,11 +204,11 @@ class ShopByCategoryComponent extends Component
                 //     $q->where('department_code', 'LIKE', '%' . $this->search . '%');
                 // })
                 // ->orderBy($this->sort_column, $this->sort)
-                ->when($this->search, function ($qs) {
-                    $qs->where('image_title', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('order_by', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('button_name', 'LIKE', '%' . $this->search . '%');
-                })->orderBy($this->sort_column, $this->sort)
+                // ->when($this->search, function ($qs) {
+                //     $qs->where('image_title', 'LIKE', '%' . $this->search . '%')
+                //         ->orWhere('order_by', 'LIKE', '%' . $this->search . '%')
+                //         ->orWhere('button_name', 'LIKE', '%' . $this->search . '%');
+                // })->orderBy($this->sort_column, $this->sort)
                 ->paginate(15),
         ]);
     }

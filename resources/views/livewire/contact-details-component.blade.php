@@ -24,18 +24,10 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th wire:click="sort('text')" style="cursor: pointer">Emal <i class="fas fa-sort"></i>
-                                </th>
-                                <th wire:click="sort('text')" style="cursor: pointer">Mobile number <i
-                                        class="fas fa-sort"></i>
-                                </th>
-                                <th wire:click="sort('url')" style="cursor: pointer">Whatsapp number <i
-                                        class="fas fa-sort"></i>
-                                </th>
-
-                                <th wire:click="sort('order_by')" style="cursor: pointer">Phone number <i
-                                        class="fas fa-sort"></i></th>
-
+                                <th>Emal </th>
+                                <th>Mobile number </th>
+                                <th>Whatsapp number </th>
+                                <th>Phone number</th>
                                 <th>Action <button wire:click="add" type="button" data-toggle="modal"
                                         data-target="#exampleModal" class="btn text-lg p-0 m-0"> <i
                                             class="fas fa-plus-square"></i></button>
@@ -94,7 +86,7 @@
                     @if ($delete != 'delete')
                         <div class="row pb-3 ">
 
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Email</label>
                                 <input type="email" placeholder="Email" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="email"
@@ -103,7 +95,7 @@
                                     <span style="color:red">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Mobile number</label>
                                 <input type="number" placeholder="Mobile number" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="mobile_number"
@@ -115,7 +107,7 @@
 
 
 
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Whatsapp
                                     number</label>
                                 <input type="number" placeholder="Whatsapp number" class="col-lg rounded  my-0"
@@ -125,7 +117,7 @@
                                     <span style="color:red">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Phone
                                     number</label>
                                 <input type="number" placeholder="Phone number" class="col-lg rounded  my-0"

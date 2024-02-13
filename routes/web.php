@@ -7,8 +7,10 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SingleController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\OrderController;
 use App\Http\Livewire\MyLiveComponent;
 use App\Imports\ExcelFileImport;
 use App\Models\Role;
@@ -21,20 +23,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 
-*/
 
-Route::get('test', function () {
-});
 
 Route::get('exls', function () {
     Excel::import(new ExcelFileImport, public_path('files/Data Structure.xlsx'));
@@ -42,6 +32,13 @@ Route::get('exls', function () {
 
 Route::get('/grid', function () {
     return view('livewire.component.chetak-grid');
+});
+Route::get('/blog', function () {
+    return view('blog');
+});
+
+Route::get('/customise-design', function () {
+    return view('customise-design');
 });
 
 Route::get('update-url', function () {
@@ -55,15 +52,28 @@ Route::get('update-url', function () {
 });
 
 Auth::routes();
+Route::middleware([
+    'auth',
+])->group(function () {
+    Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
+    Route::get('/subscribers-excle', [HomeController::class, 'downloadExcle'])->name('downloadExcle');
 
+    Route::get('orders', [OrderController::class, 'orders'])->name('orders');
+    Route::get('/tracking/{id}', [OrderController::class, 'tracking'])->name('tracking');
+    Route::get('/invoice/{id}', [OrderController::class, 'invoice'])->name('invoice');
+    Route::get('/invoice-pdf/{id}', [OrderController::class, 'downloadInvoice'])->name('downloadInvoice');
+});
 Route::get('/my-com', MyLiveComponent::class);
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/hello', [HomeController::class, 'hello'])->name('hello');
 Route::get('/shop/{category}/{style?}/{subCategory?}', [ProductController::class, 'producFront'])->name('products');
+Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('recently-viewed', [ProductController::class, 'recentView'])->name('recent-view');
 Route::get('wishlist', [WishlistController::class, 'wishList'])->name('wishlists');
 Route::get('cart', [CartController::class, 'cart'])->name('cart');
-Route::get('single', [SingleController::class, 'single'])->name('single');
-// Route::get('/url1', [HomeController::class, 'index1'])->name('home1');
+Route::get('/cart/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+
+Route::get('/details/{product}', [SingleController::class, 'single'])->name('single');
 Route::get('/popup', [HomeController::class, 'popup']);
 Route::get('/accept', [HomeController::class, 'Accept'])->name('accept');
 
@@ -71,8 +81,8 @@ Route::post('/subscribe', [HomeController::class, 'newsletter'])->name('newslett
 Route::get('/unsubscribe/{email}', [HomeController::class, 'nonewsletter'])->name('nonewsletter');
 Route::post('unsubscribe', [HomeController::class, 'unsubscribe'])->name('unsubscribe');
 
-Route::group(['prefix' => 'admin'], function () {
 
+Route::group(['prefix' => 'admin'], function () {
     Route::get('/', [HomeController::class, 'dashboard'])->name('home');
     Route::controller(CustomerController::class)->group(function () {
         Route::get('customers', 'index')->name('customers');

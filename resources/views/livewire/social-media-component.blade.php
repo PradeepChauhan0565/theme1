@@ -24,19 +24,17 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th wire:click="sort('text')" style="cursor: pointer">Name <i class="fas fa-sort"></i>
+                                <th wire:click="sort('name')" style="cursor: pointer">Name <i class="fas fa-sort"></i>
                                 </th>
-                                <th wire:click="sort('text')" style="cursor: pointer">Icon <i class="fas fa-sort"></i>
+                                <th wire:click="sort('icon')" style="cursor: pointer">Icon <i class="fas fa-sort"></i>
                                 </th>
-                                <th wire:click="sort('url')" style="cursor: pointer">Link <i class="fas fa-sort"></i>
+                                <th wire:click="sort('link')" style="cursor: pointer">Link <i class="fas fa-sort"></i>
                                 </th>
 
                                 <th wire:click="sort('order_by')" style="cursor: pointer">Order By<i
                                         class="fas fa-sort"></i></th>
 
-                                <th wire:click="sort('order_by')" style="cursor: pointer">Status <i
-                                        class="fas fa-sort"></i>
-                                </th>
+                                <th>Status </th>
 
                                 <th>Action <button wire:click="add" type="button" data-toggle="modal"
                                         data-target="#exampleModal" class="btn text-lg p-0 m-0"> <i
@@ -104,7 +102,7 @@
                     @if ($delete != 'delete')
                         <div class="row pb-3 ">
 
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Name</label>
                                 <input type="text" placeholder="Name" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="name"
@@ -113,7 +111,7 @@
                                     <span style="color:red">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Icon</label>
                                 <input type="text" placeholder="Icon" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="icon"
@@ -125,7 +123,7 @@
 
 
 
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Link</label>
                                 <input type="text" placeholder="Link" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="link"
@@ -136,7 +134,7 @@
                             </div>
 
 
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Order By</label>
                                 <input type="number" placeholder="Order by" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="order_by"

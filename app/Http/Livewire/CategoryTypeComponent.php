@@ -124,6 +124,11 @@ class CategoryTypeComponent extends Component
 
     public function update()
     {
+        if (empty($this->old_banner)) {
+            CategoryType::where('id', $this->catype_id)->update([
+                'banner' => null,
+            ]);
+        }
         if ($this->banner) {
             $imagename = $this->banner->getClientOriginalName();
             $image = $this->banner->storeAs('public/categorytypebanners', $imagename);
@@ -146,6 +151,14 @@ class CategoryTypeComponent extends Component
             'updated_by' => Auth::user()->id
         ]);
         $this->dispatchBrowserEvent('livewireUpdated');
+    }
+    public function removepreview()
+    {
+        $this->banner = null;
+    }
+    public function removeold()
+    {
+        $this->old_banner = null;
     }
 
     public function view($disabled, $id)
@@ -199,15 +212,16 @@ class CategoryTypeComponent extends Component
             $this->status[$ctypes->id] = $ctypes->status;
         }
 
-        // $columns = $table->getTableColumns('urls');
+        $table = new CategoryType();
+        $columns = $table->getTableColumns('category_types');
         return view('livewire.category-type-component', [
             'categories' => Category::all(),
-            'categorytypes' => CategoryType::orderBy('id', 'asc')
-                // 'urls' => HeroBanner::when($this->search, function ($q) use ($columns) {
-                //     foreach ($columns as $column) {
-                //         $q->orWhere($column, 'LIKE', $this->search . '%');
-                //     }
-                // })
+            // 'categorytypes' => CategoryType::orderBy('id', 'asc')
+            'categorytypes' => CategoryType::when($this->search, function ($q) use ($columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', $this->search . '%');
+                }
+            })->orderBy($this->sort_column, $this->sort)
                 // ->orWhereHas('company', function ($q) {
                 //     $q->where('company_code', 'LIKE', '%' . $this->search . '%');
                 // })
@@ -215,11 +229,11 @@ class CategoryTypeComponent extends Component
                 //     $q->where('department_code', 'LIKE', '%' . $this->search . '%');
                 // })
                 // ->orderBy($this->sort_column, $this->sort)
-                ->when($this->search, function ($qs) {
-                    $qs->where('name', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('order_by', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('category_id', 'LIKE', '%' . $this->search . '%');
-                })
+                // ->when($this->search, function ($qs) {
+                //     $qs->where('name', 'LIKE', '%' . $this->search . '%')
+                //         ->orWhere('order_by', 'LIKE', '%' . $this->search . '%')
+                //         ->orWhere('category_id', 'LIKE', '%' . $this->search . '%');
+                // })
                 ->paginate(15),
         ]);
     }

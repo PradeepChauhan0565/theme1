@@ -197,15 +197,15 @@ class WeddingIdentityComponent extends Component
             $this->status[$weddings->id] = $weddings->status;
         }
 
-
-        // $columns = $table->getTableColumns('urls');
+        $table = new WeddingIdentity();
+        $columns = $table->getTableColumns('wedding_identities');
         return view('livewire.wedding-identity-component', [
-            'wedingidentity' => WeddingIdentity::orderBy('id', 'asc')
-                // 'urls' => HeroBanner::when($this->search, function ($q) use ($columns) {
-                //     foreach ($columns as $column) {
-                //         $q->orWhere($column, 'LIKE', $this->search . '%');
-                //     }
-                // })
+            // 'wedingidentity' => WeddingIdentity::orderBy('id', 'asc')
+            'wedingidentity' => WeddingIdentity::when($this->search, function ($q) use ($columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', $this->search . '%');
+                }
+            })->orderBy($this->sort_column, $this->sort)
                 // ->orWhereHas('company', function ($q) {
                 //     $q->where('company_code', 'LIKE', '%' . $this->search . '%');
                 // })
@@ -213,11 +213,11 @@ class WeddingIdentityComponent extends Component
                 //     $q->where('department_code', 'LIKE', '%' . $this->search . '%');
                 // })
                 // ->orderBy($this->sort_column, $this->sort)
-                ->when($this->search, function ($qs) {
-                    $qs->where('image_title', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('order_by', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('heading', 'LIKE', '%' . $this->search . '%');
-                })
+                // ->when($this->search, function ($qs) {
+                //     $qs->where('image_title', 'LIKE', '%' . $this->search . '%')
+                //         ->orWhere('order_by', 'LIKE', '%' . $this->search . '%')
+                //         ->orWhere('heading', 'LIKE', '%' . $this->search . '%');
+                // })
                 ->paginate(15),
         ]);
     }

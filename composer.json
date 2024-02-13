@@ -14,7 +14,7 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.0",
         "livewire/livewire": "^2.10",
-        "maatwebsite/excel": "^3.1"
+        "maatwebsite/excel": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
@@ -58,7 +58,7 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [ "laravel/dusk"]
         }
     },
     "config": {
@@ -71,4 +71,5 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true
+    
 }

@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Models\Menu;
 use App\Models\RoleUrl;
-use App\Models\url;
+use App\Models\Url;
 use App\Models\User;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\ServiceProvider;

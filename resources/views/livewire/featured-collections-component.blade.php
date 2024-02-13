@@ -24,11 +24,11 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th wire:click="sort('text')" style="cursor: pointer">Collections Image <i
+                                <th wire:click="sort('fc_image')" style="cursor: pointer">Collections Image <i
                                         class="fas fa-sort"></i>
                                 </th>
 
-                                <th wire:click="sort('url')" style="cursor: pointer">Image Title <i
+                                <th wire:click="sort('image_title')" style="cursor: pointer">Image Title <i
                                         class="fas fa-sort"></i>
                                 </th>
                                 <th wire:click="sort('url')" style="cursor: pointer">URL <i class="fas fa-sort"></i>
@@ -36,8 +36,7 @@
 
                                 <th wire:click="sort('order_by')" style="cursor: pointer">Order By <i
                                         class="fas fa-sort"></i></th>
-                                <th wire:click="sort('label')" style="cursor: pointer">Status <i
-                                        class="fas fa-sort"></i>
+                                <th>Status</th>
                                 <th>Action <button wire:click="add" type="button" data-toggle="modal"
                                         data-target="#exampleModal" class="btn text-lg p-0 m-0"> <i
                                             class="fas fa-plus-square"></i></button>
@@ -106,9 +105,9 @@
                 <div class="modal-body  px-4">
                     @if ($delete != 'delete')
                         <div class="row pb-3 ">
-                            <div class="col-lg-3 ">
-                                <label for="floatingInput" class="my-0 "
-                                    style="font-weight: 600; color:#000000">Image</label>
+                            <div class="col-lg-3 col-md-6 ">
+                                <label for="floatingInput" class="my-0 " style="font-weight: 600; color:#000000">Image
+                                    <span style="color:#a19898; font-size:13px;">(250px * 330px)</span></label>
                                 <input type="file" placeholder="Text" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="fc_image"
                                     style="outline: 0; padding:4px; border:1px solid black">
@@ -128,7 +127,7 @@
                             </div>
 
 
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Image
                                     Title</label>
                                 <input type="text" placeholder="Image Title" class="col-lg rounded  my-0"
@@ -138,7 +137,7 @@
                                     <span style="color:red">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">URL</label>
                                 <input type="text" placeholder="Url" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="url"
@@ -148,7 +147,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Order By</label>
                                 <input type="number" placeholder="Order By" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="order_by"

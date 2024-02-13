@@ -72,6 +72,7 @@ class CategoryComponent extends Component
     {
         dd('test');
     }
+
     public function store()
     {
         $this->validate([
@@ -82,13 +83,14 @@ class CategoryComponent extends Component
 
         $slug = Str::slug($this->name, "-");
         if ($this->banner) {
+            $image_name = 0;
             $image_name = $this->banner->getClientOriginalName();
             $image = $this->banner->storeAs('public/categorybanners', $image_name);
         }
         Category::create([
             'name' => $this->name,
             'description' => $this->description,
-            'banner' => $image_name,
+            'banner' => $image_name ?? null,
             'slug' => $slug,
             'banner_title' => $this->banner_title,
             'order_by' => $this->order_by ?: null,
@@ -114,7 +116,13 @@ class CategoryComponent extends Component
 
     public function update()
     {
-        $name = null;
+
+        // $this->banner = null;
+        if (empty($this->old_banner)) {
+            Category::where('id', $this->cat_id)->update([
+                'banner' => null,
+            ]);
+        }
 
         if ($this->banner) {
             $imagename = $this->banner->getClientOriginalName();
@@ -138,7 +146,14 @@ class CategoryComponent extends Component
         ]);
         $this->dispatchBrowserEvent('livewireUpdated');
     }
-
+    public function removepreview()
+    {
+        $this->banner = null;
+    }
+    public function removeold()
+    {
+        $this->old_banner = null;
+    }
     public function view($disabled, $id)
     {
         $this->delete = null;
@@ -175,6 +190,12 @@ class CategoryComponent extends Component
             'status' => $d,
         ]);
     }
+
+    // public function removeImage($old_banner)
+    // {
+    //     Category::find($this->old_banner)->delete();
+    // }
+
     public function companyChange()
     {
         // $companies = Company::where('comapny_code','Like',)
@@ -188,27 +209,17 @@ class CategoryComponent extends Component
         foreach ($categories as $categories) {
             $this->status[$categories->id] = $categories->status;
         }
-
+        $table = new Category();
+        $columns = $table->getTableColumns('categories');
         // $columns = $table->getTableColumns('urls');
         return view('livewire.category-component', [
-            'categories' => Category::orderBy('id', 'asc')
-                // 'urls' => HeroBanner::when($this->search, function ($q) use ($columns) {
-                //     foreach ($columns as $column) {
-                //         $q->orWhere($column, 'LIKE', $this->search . '%');
-                //     }
-                // })
-                // ->orWhereHas('company', function ($q) {
-                //     $q->where('company_code', 'LIKE', '%' . $this->search . '%');
-                // })
-                // ->orWhereHas('department', function ($q) {
-                //     $q->where('department_code', 'LIKE', '%' . $this->search . '%');
-                // })
-                // ->orderBy($this->sort_column, $this->sort)
-                ->when($this->search, function ($qs) {
-                    $qs->where('name', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('order_by', 'LIKE', '%' . $this->search . '%')
-                        ->orWhere('banner_title', 'LIKE', '%' . $this->search . '%');
-                })
+            // 'categories' => Category::orderBy('id', 'asc')
+            'categories' => Category::when($this->search, function ($q) use ($columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', $this->search . '%');
+                }
+            })->orderBy($this->sort_column, $this->sort)
+
                 ->paginate(15),
         ]);
     }

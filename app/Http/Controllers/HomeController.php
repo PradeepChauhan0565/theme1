@@ -10,11 +10,14 @@ use App\Models\FeaturedCollections;
 use App\Models\HeadingSingleBanner;
 use App\Models\Subscribe;
 use App\Mail\SendMail;
-
+use Illuminate\Support\Facades\Session;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\ExportSubscribe;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Mail;
+
 
 
 class HomeController extends Controller
@@ -26,7 +29,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -34,11 +37,19 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
     public function dashboard()
     {
-        return view('home');
+        return view('dashboard');
     }
-
+    public function profile()
+    {
+        return view('user-profile');
+    }
+    public function downloadExcle()
+    {
+        return Excel::download(new ExportSubscribe, 'subscribers.xlsx');
+    }
 
     public function popup()
     {
@@ -93,9 +104,17 @@ class HomeController extends Controller
     {
         return view('unsubscribe', compact('email'));
     }
-
-    public function index()
+    public function index1()
     {
+        return view('lazy');
+    }
+
+    public function index(Request $request)
+    {
+
+        // $request->session()->flash('message ', 'For testing');
+        // Session::flash('message', 'This is a message!');
+        // session(['alert-succes' => 'For testing']);
         $herobanners = HeroBanner::orderBy('order_by', 'asc')->where('status', 1)->get();
         $shopbycats = ShopByCategory::orderBy('order_by', 'asc')->where('status', 1)->get();
         $weddings = WeddingIdentity::orderBy('order_by', 'asc')->where('status', 1)->get();

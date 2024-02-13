@@ -24,25 +24,14 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th wire:click="sort('text')" style="cursor: pointer">Heading first <i
-                                        class="fas fa-sort"></i>
-                                </th>
-                                <th wire:click="sort('text')" style="cursor: pointer">Heading second <i
-                                        class="fas fa-sort"></i>
-                                </th>
-                                <th wire:click="sort('url')" style="cursor: pointer">Heading third <i
-                                        class="fas fa-sort"></i>
-                                </th>
+                                <th>Heading first </th>
+                                <th>Heading second </th>
+                                <th>Heading third </th>
 
-                                <th wire:click="sort('order_by')" style="cursor: pointer">Heading forth <i
-                                        class="fas fa-sort"></i></th>
-                                <th wire:click="sort('order_by')" style="cursor: pointer">Banner image <i
-                                        class="fas fa-sort"></i></th>
-                                <th wire:click="sort('order_by')" style="cursor: pointer">Image Title<i
-                                        class="fas fa-sort"></i>
-                                </th>
-                                <th wire:click="sort('order_by')" style="cursor: pointer">Url<i class="fas fa-sort"></i>
-                                </th>
+                                <th>Heading forth </th>
+                                <th>Banner image </th>
+                                <th>Image Title </th>
+                                <th>Url </th>
 
                                 <th>Action <button wire:click="add" type="button" data-toggle="modal"
                                         data-target="#exampleModal" class="btn text-lg p-0 m-0"> <i
@@ -107,7 +96,7 @@
                     @if ($delete != 'delete')
                         <div class="row pb-3 ">
 
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Heading first</label>
                                 <input type="text" placeholder="Heading first" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="heading_first"
@@ -116,7 +105,7 @@
                                     <span style="color:red">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Heading
                                     second</label>
                                 <input type="text" placeholder="Heading second" class="col-lg rounded  my-0"
@@ -129,7 +118,7 @@
 
 
 
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Heading
                                     third</label>
                                 <input type="text" placeholder="Heading third" class="col-lg rounded  my-0"
@@ -139,7 +128,7 @@
                                     <span style="color:red">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Heading
                                     forth</label>
                                 <input type="text" placeholder="Heading forth" class="col-lg rounded  my-0"
@@ -151,7 +140,7 @@
                             </div>
 
 
-                            <div class="col-lg-3 ">
+                            <div class="col-lg-3 col-md-6 ">
                                 <label for="floatingInput" class="my-0 "
                                     style="font-weight: 600; color:#000000">Banner Image</label>
                                 <input type="file" placeholder="Text" class="col-lg rounded  my-0"
@@ -173,7 +162,7 @@
                                     <span style="color:red">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Image
                                     Title</label>
                                 <input type="text" placeholder="Image Title" class="col-lg rounded  my-0"
@@ -183,7 +172,7 @@
                                     <span style="color:red">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="floatingInput" class="my-0" style="font-weight: 600">Url</label>
                                 <input type="text" placeholder="Url" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="url"

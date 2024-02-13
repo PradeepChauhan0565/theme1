@@ -50,7 +50,6 @@ class UserComponent extends Component
     public function getTableId($table_id, $column_name)
     {
         $this->$column_name = $table_id;
-        
     }
 
     public function sort($column)
@@ -121,7 +120,7 @@ class UserComponent extends Component
         $this->email_verified_at = $user->email_verified_at;
         $this->password = $user->password;
         $this->remember_token = $user->remember_token;
-        
+
         $this->emit('childRefresh', $id);
     }
 

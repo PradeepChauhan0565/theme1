@@ -1,0 +1,385 @@
+   /* -----------------index page css start------------------ */
+          .explore_btn {
+              background-color: #071d49;
+          }
+
+          .explore_arrow {
+              color: #fff;
+          }
+
+          .explore_btn:hover .explore_arrow {
+              transform: translateX(8px);
+              transition: 0.6s;
+          }
+
+          .wrapper {
+              display: flex;
+              max-width: 1200px;
+              position: relative;
+          }
+
+          .wrapper i {
+              top: 50%;
+              height: 44px;
+              width: 44px;
+              color: #343F4F;
+              cursor: pointer;
+              font-size: 1.28rem;
+              position: absolute;
+              text-align: center;
+              line-height: 44px;
+              background: #fff;
+              border-radius: 50%;
+              transform: translateY(-50%);
+              transition: transform 0.1s linear;
+          }
+
+          .wrapper i:active {
+              transform: translateY(-50%) scale(0.9);
+          }
+
+          .wrapper i:hover {
+              background: #f2f2f2;
+          }
+
+          .wrapper i:first-child {
+              left: -22px;
+              display: none;
+          }
+
+          .wrapper i:last-child {
+              right: -22px;
+          }
+
+          .wrapper .carousel {
+              font-size: 0px;
+              cursor: pointer;
+              overflow: hidden;
+              white-space: nowrap;
+              scroll-behavior: smooth;
+          }
+
+          .carousel.dragging {
+              cursor: grab;
+              scroll-behavior: auto;
+          }
+
+          .carousel.dragging img {
+              pointer-events: none;
+          }
+
+          .carousel img {
+              height: 380px;
+              object-fit: cover;
+              user-select: none;
+              margin-left: 14px;
+              width: calc(100% / 4);
+          }
+
+          .carousel img:first-child {
+              margin-left: 0px;
+          }
+
+          @media screen and (max-width: 900px) {
+              .carousel img {
+                  width: calc(100% / 2);
+              }
+          }
+
+          @media screen and (max-width: 550px) {
+              .carousel img {
+                  width: 100%;
+              }
+          }
+
+          .jumpbody {
+              position: relative;
+
+          }
+
+          .jump button {
+              background-color: #071d49;
+              border: 0;
+          }
+
+          .jump {
+              position: absolute;
+              bottom: -15px;
+              left: 50%;
+              transform: translateX(-50%);
+              background-color: #071d49;
+              transition: 1.5s;
+
+          }
+
+          .jumpbody:hover .jump {
+              bottom: 30%;
+
+          }
+
+          img {
+              width: 100%;
+          }
+
+
+          /* Image-container design */
+          .image-container {
+              max-width: 100%;
+              position: relative;
+              margin: auto;
+              z-index: 0;
+          }
+
+          .next {
+              right: 0;
+          }
+
+          /* Next and previous icon design */
+          .previous,
+          .next {
+              cursor: pointer;
+              position: absolute;
+              top: 50%;
+              /* background-color: red; */
+              padding: 10px;
+              margin-top: -25px;
+              z-index: 1;
+          }
+
+          /* caption decorate */
+          .captionText {
+              color: #071d49;
+              font-size: 14px;
+              position: absolute;
+              padding: 12px 12px;
+              bottom: 8px;
+              width: 100%;
+              text-align: center;
+          }
+
+          /* Slider image number */
+          .slideNumber {
+              background-color: #858585;
+              color: white;
+              border-radius: 25px;
+              right: 0;
+              opacity: .5;
+              margin: 5px;
+              width: 30px;
+              height: 30px;
+              text-align: center;
+              font-weight: bold;
+              font-size: 20px;
+              position: absolute;
+          }
+
+          .fa {
+              font-size: 36px;
+              /* color: #b88c99; */
+          }
+
+          .fa:hover {
+              transform: rotate(360deg);
+              transition: 1s;
+              color: rgb(214, 211, 211);
+          }
+
+          .footerdot {
+              cursor: pointer;
+              height: 15px;
+              width: 15px;
+              margin: 0 2px;
+              background-color: #bbbbbb;
+              border-radius: 50%;
+              display: inline-block;
+              transition: background-color 0.5s ease;
+          }
+
+          .footerdot.active,
+          .footerdot:hover {
+              background-color: #071d49;
+          }
+       /* -----------------index page css end------------------ */
+
+
+       /* -----------------product page css start------------------ */
+   
+        .details {
+            display: none;
+            transition-delay: 9s;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            transition: all 6s ease-out;
+            transition-duration: 2s;
+        }
+
+        .product:hover .details {
+            display: block;
+        }
+
+        #next:hover .fa-angle-left,
+        #prev:hover .fa-angle-right {
+            transform: rotate(360deg);
+            transition: 1s;
+        }
+
+     
+       .dropdown .btn-secondary {
+            color: #fff;
+            background-color: #071d49;
+            border-color: #071d49;
+        }
+
+        .ft-toolbar {
+            position: fixed;
+            width: 100%;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 9;                                                                                                                                                                                                                                                                                                                                                                        overflow-y: hidden; */
+            -webkit-overflow-scrolling: touch;
+            padding: 5px;      
+            background-color: #fff;
+            box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        /* ----------------accrdian css------------- */
+        .accordion-title:before {
+            float: right !important;
+            font-family: FontAwesome;
+            content: "\f068";
+            padding-right: 5px;
+        }
+
+        .accordion-title.collapsed:before {
+            float: right !important;
+            content: "\f067";
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #d6c3c3;
+        }
+
+        .card {
+            border: none;
+        }
+
+        .collapseborder {
+            border-bottom: 1px solid #d6c3c3;
+        }
+
+        .form-check-input:checked {
+            background-color: #071d49;
+            border-color: #071d49;
+        }
+
+        .form-check label,
+        .form-check-input {
+            cursor: pointer;
+        }
+
+       .modal .modal-sort-filter {
+            position: fixed;
+            bottom: 0;
+            left: 0%;
+            right: 0%;
+            transform: translate(-50%, -50%);
+        }
+    
+
+       /* -----------------product page css end------------------ */
+       /* -----------------single page css start------------------ */
+          /* ------------review css------- */
+        .rating {
+            padding-bottom: 30px;
+        }
+
+        .rating label {
+            float: right;
+            position: relative;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .rating label:not(:first-of-type) {
+            padding-right: 2px;
+        }
+
+        .rating label:before {
+            content: "\2605";
+            font-size: 42px;
+            color: #ccc;
+            line-height: 1;
+        }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating input:checked~label:before,
+        .rating:not(:checked)>label:hover:before,
+        .rating:not(:checked)>label:hover~label:before {
+            color: #071d49;
+        }
+
+          /* -----------exzoom css---------- */
+        #exzoom {
+            width: auto;
+        }
+
+        .product_list_ul {
+            position: relative;
+        }
+
+        .bvideo-wrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            transform: translate3d(0px, 0px, 0px);
+            width: 100%;
+            height: 100%;
+
+        }
+
+        .product_list_ul:hover .bvideo-wrap {
+            display: block;
+        }
+
+        #share-buttons {
+            display: none;
+        }
+
+        .shares .share-btn {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 50px;
+            font-size: 20px;
+            background-color: #071d49;
+            color: #fff;
+            margin: 4px;
+            cursor: pointer;
+        }
+
+
+
+        .fa-thumbs-down {
+            transform: rotateY(180deg);
+        }
+
+        .zoom_btn {
+            height: 30px;
+            width: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50px;
+        }
+
+        .zoom_btn:hover {
+            background-color: #ccc;
+            z-index: 9;
+        }
+       /* -----------------single page css end------------------ */

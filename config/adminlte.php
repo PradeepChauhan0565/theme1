@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'title' => 'Sure',
+    'title' => 'New Jewelry',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -64,8 +64,8 @@ return [
     |
     */
 
-    'logo' => '<b>Sure</b>',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>New Jewelry</b>',
+    'logo_img' => 'vendor/adminlte/dist/img/New Jewelry.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -87,7 +87,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'vendor/adminlte/dist/img/New Jewelry.png',
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 50,
@@ -257,7 +257,7 @@ return [
     'dashboard_url' => '/',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    // 'register_url' => 'register',
+    'register_url' => 'register',
     'register_url' => false,
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
