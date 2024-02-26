@@ -14,10 +14,10 @@
               </a>
 
 
-              <span><a class="previous" onclick="moveSlides(-1)">
+              <span><a style="color:var(--default-color)" class="previous" onclick="moveSlides(-1)">
                       <i class="fa fa-chevron-circle-left"></i>
                   </a></span>
-              <span><a class="next" onclick="moveSlides(1)">
+              <span><a style="color:var(--default-color)" class="next" onclick="moveSlides(1)">
                       <i class="fa fa-chevron-circle-right"></i>
                   </a></span>
           @endforeach
@@ -32,108 +32,112 @@
       </div>
 
 
-
       <div style="width:90%; margin:auto;">
-          <div class="text-center mb-4 mt-5">
-              <h1 class="">{{ $headings->heading_first }}
-              </h1>
-          </div>
-          <div class="row g-3">
-              @foreach ($shopbycats as $item)
-                  <div class="col-lg-3 col-md-6 mb-5">
-                      <div class="jumpbody">
-                          <div class="">
-                              <img src="{{ asset('storage/sbcimages/' . $item->sbc_image) }}" alt="{{ $item->image_title }}"
-                                  style="width: 100%; ">
-                          </div>
-
-                          <div class="jump">
+          @if (count($shopbycats) > 0)
+              <div class="text-center mb-4 mt-5">
+                  <h1 style="color:var(--default-color)" class="">{{ $headings->heading_first }}
+                  </h1>
+              </div>
+              <div class="row g-3">
+                  @foreach ($shopbycats as $item)
+                      <div class="col-lg-3 col-md-6 mb-5">
+                          <div class="jumpbody">
                               <div class="">
-                                  <a href="{{ asset($item->url) }}">
-                                      <div class="text-center"> <button
-                                              class="px-3 py-1  text-white">{{ $item->button_name }}</button></div>
-                                  </a>
+                                  <img src="{{ asset('storage/sbcimages/' . $item->sbc_image) }}"
+                                      alt="{{ $item->image_title }}" style="width: 100%; ">
+                              </div>
+
+                              <div class="jump">
+                                  <div class="">
+                                      <a href="{{ asset($item->url) }}" target="_blank">
+                                          <div class="text-center"> <button
+                                                  class="px-3 py-1  text-white">{{ $item->button_name }}</button></div>
+                                      </a>
+                                  </div>
                               </div>
                           </div>
                       </div>
-                  </div>
-              @endforeach
+                  @endforeach
 
-          </div>
-
-
-
-          <div class="mt-5">
-              <a href="{{ asset($headings->url) }}"><img
-                      src="{{ asset('storage/singlebanner/' . $headings->banner_image) }}"
-                      alt="{{ $headings->image_title }}"></a>
-          </div>
-
-          <section id="slider" class="pt-5">
-              <div class="text-center mb-10">
-                  <h1 class="">{{ $headings->heading_second }}</h1>
               </div>
-              <div class="slider ">
-                  <div class="owl-carousel ">
-                      @foreach ($weddings as $item)
-                          <div class="slider-card">
-                              <a href="{{ $item->url }}">
-                                  <div class="d-flex justify-content-center align-items-center mb-4">
-                                      <img src="{{ asset('storage/wiimages/' . $item->wi_image) }}"
-                                          alt="{{ $item->image_title }}" style="width: 100%">
-                                  </div>
-                                  <h5 class="mb-0 text-center"><b>{{ $item->heading }}</b></h5>
-                                  <p class="text-center  p-4">{{ $item->content }} </p>
-                              </a>
+          @endif
+
+          @if ($headings->banner_image != null)
+              <div class="mt-5">
+                  <a href="{{ asset($headings->url) }}"><img
+                          src="{{ asset('storage/singlebanner/' . $headings->banner_image) }}"
+                          alt="{{ $headings->image_title }}"></a>
+              </div>
+          @endif
+
+          @if (count($weddings) > 0)
+              <section id="slider" class="pt-5">
+                  <div class="text-center mb-10">
+                      <h1 style="color:var(--default-color)">{{ $headings->heading_second }}</h1>
+                  </div>
+                  <div class="slider ">
+                      <div class="owl-carousel ">
+                          @foreach ($weddings as $item)
+                              <div class="slider-card">
+                                  <a href="{{ $item->url }}" style="color:var(--default-color)">
+                                      <div class="d-flex justify-content-center align-items-center mb-4">
+                                          <img src="{{ asset('storage/wiimages/' . $item->wi_image) }}"
+                                              alt="{{ $item->image_title }}" style="width: 100%">
+                                      </div>
+                                      <h5 class="mb-0 text-center"><b>{{ $item->heading }}</b></h5>
+                                      <p class="text-center  p-4">{{ $item->content }}
+                                      </p>
+                                  </a>
+                              </div>
+                          @endforeach
+
+                      </div>
+                  </div>
+              </section>
+          @endif
+          @if (count($getins) > 0)
+              <div>
+                  <div class="text-center mb-4 mt-5">
+                      <h1 style="color:var(--default-color)" class="text-5xl"> {{ $headings->heading_third }}</h1>
+                  </div>
+                  <div class="row g-3">
+                      @foreach ($getins as $item)
+                          <div class="mb-5 col-lg-3 col-md-6" style="color:var(--default-color)">
+                              <img src="{{ 'storage/getimages/' . $item->gi_image }}" alt="{{ $item->image_title }}"
+                                  style="width:100%;">
+                              <h5 class="mt-4 ">{{ $item->heading }}</h5>
+                              <p class="my-3 " style="text-align: justify;">{{ $item->content }}</p>
+                              <a href="{{ $item->url }}"
+                                  class="explore_btn border border-black rounded-full px-4 py-2  text-white "
+                                  style="text-decoration: none;">Explore Now <i
+                                      class="fas fa-arrow-right explore_arrow"></i></a>
                           </div>
                       @endforeach
 
                   </div>
               </div>
-          </section>
+          @endif
+          @if (count($collections) > 0)
+              <div class="px-1">
+                  <div class="text-center mb-4 mt-5">
+                      <h1 style="color:var(--default-color)" class="text-5xl">{{ $headings->heading_forth }} </h1>
+                  </div>
+                  <div class="mb-5">
+                      <div class="wrapper">
+                          <i id="left" class="fa-solid fa-angle-left" style="z-index: 99;"></i>
+                          <div class="carousel flex">
+                              @foreach ($collections as $item)
+                                  <a href="{{ $item->url }}" class="mx-2"> <img
+                                          src="{{ asset('storage/collections/' . $item->fc_image) }}"
+                                          alt="{{ $item->image_title }}" draggable="false"></a>
+                              @endforeach
 
-          <div>
-              <div class="text-center mb-4 mt-5">
-                  <h1 class="text-5xl"> {{ $headings->heading_third }}</h1>
-              </div>
-              <div class="row g-3">
-                  @foreach ($getins as $item)
-                      <div class="mb-5 col-lg-3 col-md-6">
-                          <img src="{{ 'storage/getimages/' . $item->gi_image }}" alt="{{ $item->image_title }}"
-                              style="width:100%;">
-                          <h5 class="mt-4 ">{{ $item->heading }}</h5>
-                          <p class="my-3 " style="text-align: justify;">{{ $item->content }}</p>
-                          <a href="{{ $item->url }}"
-                              class="explore_btn border border-black rounded-full px-4 py-2  text-white "
-                              style="text-decoration: none;">Explore Now <i
-                                  class="fas fa-arrow-right explore_arrow"></i></a>
+                          </div>
+                          <i id="right" class="fa-solid fa-angle-right"></i>
                       </div>
-                  @endforeach
-
-              </div>
-          </div>
-
-
-          <div class="px-1">
-              <div class="text-center mb-4 mt-5">
-                  <h1 class="text-5xl">{{ $headings->heading_forth }} </h1>
-              </div>
-              <div class="mb-5">
-                  <div class="wrapper">
-                      <i id="left" class="fa-solid fa-angle-left" style="z-index: 99;"></i>
-                      <div class="carousel flex">
-                          @foreach ($collections as $item)
-                              <a href="{{ $item->url }}" class="mx-2"> <img
-                                      src="{{ asset('storage/collections/' . $item->fc_image) }}"
-                                      alt="{{ $item->image_title }}" draggable="false"></a>
-                          @endforeach
-
-                      </div>
-                      <i id="right" class="fa-solid fa-angle-right"></i>
                   </div>
               </div>
-          </div>
-
+          @endif
 
 
 

@@ -32,7 +32,7 @@
     <script src="//unpkg.com/alpinejs" defer></script>
 
     @livewireStyles
-
+    @stack('scripts')
     <style>
         * {
             margin: 0;
@@ -42,7 +42,11 @@
             text-decoration: none;
             /* font-family:  Helvetica Neue,Helvetica,Arial,sans-serif; */
             font-family: 'Public Sans', sans-serif;
-            color: #071d49;
+        }
+
+        :root {
+            --default-color: #071d49;
+            --active-color: #00CFFF;
         }
     </style>
 </head>

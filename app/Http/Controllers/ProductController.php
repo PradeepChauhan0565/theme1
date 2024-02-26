@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\CategoryType;
+use App\Models\ProductImage;
 use App\Models\SubCategory;
 
 use Illuminate\Http\Request;
@@ -48,5 +49,13 @@ class ProductController extends Controller
     {
 
         return view('recent-view');
+    }
+
+    public function singleImage($product_id, $color_id)
+    {
+        $productImage = ProductImage::where('product_id', $product_id)
+            ->where('image_color_id', $color_id)
+            ->get();
+        return view('singleImage', compact('productImage'));
     }
 }

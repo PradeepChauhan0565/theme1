@@ -36,10 +36,10 @@ class ProductDetail extends Model
     {
         return $this->belongsTo(DiamondSize::class, 'size_id');
     }
-    public function diamondSetting()
-    {
-        return $this->belongsTo(DiamondSetting::class, 'setting_id');
-    }
+    // public function diamondSetting()
+    // {
+    //     return $this->belongsTo(DiamondSetting::class, 'setting_id');
+    // }
     public function diadondQuality()
     {
         return $this->belongsTo(DiadondQuality::class, 'quality_id');
@@ -65,10 +65,10 @@ class ProductDetail extends Model
     {
         return $this->belongsTo(ColorStoneName::class, 'stone_name_id');
     }
-    public function colorStoneSetting()
-    {
-        return $this->belongsTo(ColorStoneSetting::class, 'setting_id');
-    }
+    // public function colorStoneSetting()
+    // {
+    //     return $this->belongsTo(ColorStoneSetting::class, 'setting_id');
+    // }
     public function colorStoneColor()
     {
         return $this->belongsTo(ColorStoneColor::class, 'color_id');

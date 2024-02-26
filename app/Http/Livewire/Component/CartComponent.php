@@ -16,14 +16,16 @@ class CartComponent extends Component
 
     public function render()
     {
-        $this->cartItems = Cart::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->get();
-        $this->sub_total = 0;
-        $this->total = 0;
-        $this->tax = 0;
-        foreach ($this->cartItems as $item) {
-            $this->sub_total += $item->product->regular_price * $item->quantity;
+        if (Auth::check()) {
+            $this->cartItems = Cart::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->get();
+            $this->sub_total = 0;
+            $this->total = 0;
+            $this->tax = 0;
+            foreach ($this->cartItems as $item) {
+                $this->sub_total += $item->product->regular_price * $item->quantity;
+            }
+            $this->total = $this->sub_total - $this->tax;
         }
-        $this->total = $this->sub_total - $this->tax;
 
         return view('livewire.component.cart-component');
     }

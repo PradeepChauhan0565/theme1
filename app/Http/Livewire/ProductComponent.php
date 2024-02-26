@@ -42,6 +42,7 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductImport;
 use App\Models\Cart;
+use App\Models\Setting;
 use App\Models\Wishlist;
 
 class ProductComponent extends Component
@@ -286,7 +287,6 @@ class ProductComponent extends Component
             ], [
                 'product_id' => $this->pt_id,
                 'material_type_id' => $this->material_type_id ? $this->material_type_id : null,
-
                 'quality_id' => $this->diamondQuality_id ? $this->diamondQuality_id : null,
                 'color_id' => $this->diamondColor_id  ? $this->diamondColor_id : null,
                 'shape_id' =>  $this->diamondShape_id ? $this->diamondShape_id : null,
@@ -307,7 +307,6 @@ class ProductComponent extends Component
             ], [
                 'product_id' => $this->pt_id,
                 'material_type_id' => $this->material_type_id ? $this->material_type_id : null,
-
                 'color_id' => $this->colorStoneColor_id  ? $this->colorStoneColor_id : null,
                 'shape_id' =>  $this->colorStoneShape_id ? $this->colorStoneShape_id : null,
                 'size_id' => $this->colorStoneSize_id ? $this->colorStoneSize_id : null,
@@ -327,6 +326,9 @@ class ProductComponent extends Component
 
     public function productImage()
     {
+        $wcount = 1;
+        $rcount = 1;
+        $ycount = 1;
         $month = strtolower(date('M'));
         $year = strtolower(date('y'));
 
@@ -345,10 +347,12 @@ class ProductComponent extends Component
                         'product_id' => $this->pt_id,
                         'image_color_id' => 'w',
                         'url' => $imageUrl ? $imageUrl : null,
+                        'sr_no' => $wcount ? $wcount : null,
                         'is_video' => $videoUrl ? $videoUrl : null,
                         'created_by' => Auth::user()->id
                     ]
                 );
+                $wcount++;
             }
         }
         if ($this->roseImages) {
@@ -365,11 +369,13 @@ class ProductComponent extends Component
                     [
                         'product_id' => $this->pt_id,
                         'image_color_id' => 'r',
+                        'sr_no' => $rcount ? $rcount : null,
                         'url' => $imageUrl ? $imageUrl : null,
                         'is_video' => $videoUrl ? $videoUrl : null,
                         'created_by' => Auth::user()->id
                     ]
                 );
+                $rcount++;
             }
         }
         if ($this->yelloIimages) {
@@ -386,11 +392,13 @@ class ProductComponent extends Component
                     [
                         'product_id' => $this->pt_id,
                         'image_color_id' => 'y',
+                        'sr_no' => $ycount ? $ycount : null,
                         'url' => $imageUrl ? $imageUrl : null,
                         'is_video' => $videoUrl ? $videoUrl : null,
                         'created_by' => Auth::user()->id
                     ]
                 );
+                $ycount++;
             }
         }
 
@@ -647,12 +655,12 @@ class ProductComponent extends Component
             'diamondShapes' => DiamondShape::orderBy('order_by', 'asc')->where('status', 1)->get(),
             'diamondColors' => DiamondColor::orderBy('order_by', 'asc')->where('status', 1)->get(),
             'diamondSizes' => DiamondSize::orderBy('order_by', 'asc')->where('status', 1)->get(),
-            'diamondSettings' => DiamondSetting::orderBy('order_by', 'asc')->where('status', 1)->get(),
 
             'colorStoneShapes' => ColorStoneShape::orderBy('order_by', 'asc')->where('status', 1)->get(),
             'colorStoneSizes' => ColorStoneSize::orderBy('order_by', 'asc')->where('status', 1)->get(),
             'colorStoneColors' => ColorStoneColor::orderBy('order_by', 'asc')->where('status', 1)->get(),
-            'colorStoneSettings' => ColorStoneSetting::orderBy('order_by', 'asc')->where('status', 1)->get(),
+            'settings' => Setting::orderBy('order_by', 'asc')->where('status', 1)->get(),
+
             'colorStoneNames' => ColorStoneName::orderBy('order_by', 'asc')->where('status', 1)->get(),
 
             'sizes' => Size::orderBy('order_by', 'asc')->where('status', 1)->get(),
@@ -662,7 +670,7 @@ class ProductComponent extends Component
                     $qs->where('name', 'LIKE', '%' . $this->search . '%')
                         ->orWhere('sku', 'LIKE', '%' . $this->search . '%');
                     // ->orWhere('order_by', 'LIKE', '%' . $this->search . '%');
-                })->paginate(10),
+                })->paginate(50),
         ]);
     }
 }

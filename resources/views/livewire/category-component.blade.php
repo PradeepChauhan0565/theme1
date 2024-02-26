@@ -132,7 +132,8 @@
                             </div>
                             <div class="col-lg-3 col-md-6 mb-2 ">
                                 <label for="floatingInput" class="my-0 "
-                                    style="font-weight: 600; color:#000000">Banner Image</label>
+                                    style="font-weight: 600; color:#000000">Banner Image <span
+                                        style="color:#a19898; font-size:13px;">(1650px * 450px)</label>
                                 <input type="file" placeholder="Text" class="col-lg rounded  my-0"
                                     {{ $disabled }} wire:model="banner"
                                     style="outline: 0; padding:4px; border:1px solid black">

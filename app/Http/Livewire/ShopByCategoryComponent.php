@@ -131,6 +131,7 @@ class ShopByCategoryComponent extends Component
 
         ShopByCategory::find($this->sbc_id)->update([
             'sbc_image' => $name,
+            'image_title' => $this->image_title,
             'button_name' => $this->button_name,
             'url' => $this->url,
             'order_by' => $this->order_by ?: null,
@@ -145,6 +146,7 @@ class ShopByCategoryComponent extends Component
         $this->sbc_id = $id;
         $url = ShopByCategory::find($id);
         $this->old_sbc_image = $url->sbc_image;
+        $this->image_title = $url->image_title;
         $this->url = $url->url;
         $this->button_name = $url->button_name;
         $this->order_by = $url->order_by;

@@ -110,11 +110,19 @@ class HeadingSingleBannerComponent extends Component
         $this->emit('childRefresh', $id);
     }
 
-
+    public function removeoldImage()
+    {
+        $this->old_banner_image = null;
+    }
 
 
     public function update()
     {
+        if (empty($this->old_banner_image)) {
+            HeadingSingleBanner::where('id', $this->h_id)->update([
+                'banner_image' => null,
+            ]);
+        }
         if ($this->banner_image) {
             $name = $this->banner_image->getClientOriginalName();
             $image = $this->banner_image->storeAs('public/singlebanner', $name);

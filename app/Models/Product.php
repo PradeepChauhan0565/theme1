@@ -39,13 +39,21 @@ class Product extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_products');
+        return $this->belongsToMany(Category::class, 'product_categories');
     }
 
-    public function categoriesType()
+
+    public function categoryTypes()
     {
-        return $this->belongsToMany(CategoryType::class, 'category_products');
+        return $this->belongsToMany(CategoryType::class, 'product_categories', 'product_id', 'sub_category_header_id');
     }
+
+    public function subSategories()
+    {
+        return $this->belongsToMany(SubCategory::class, 'product_categories', 'product_id', 'sub_category_id');
+    }
+
+
 
     public function metals()
     {

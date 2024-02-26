@@ -17,6 +17,9 @@
          }
      </style>
 
+     @php
+         $shopbycats = App\Models\ShopByCategory::orderBy('order_by', 'asc')->where('status', 1)->get();
+     @endphp
      <div class="container">
 
          <div class="my-5" style="text-align: center; ">
@@ -36,46 +39,19 @@
              </span>
          </div>
          <div class="row">
-             <div class="col-lg-3 mb-5">
-                 <div class="shadow p-2 border">
-                     <a href="{{ asset('http://127.0.0.1:8000/shop/ring') }}">
-                         <img src="{{ asset('images/ring.jpg') }}" alt="" style="width: 100%;">
-                         <div class="py-2 text-center">
-                             Ring
-                         </div>
-                     </a>
+             @foreach ($shopbycats as $item)
+                 <div class="col-lg-3 mb-5">
+                     <div class="shadow p-2 border">
+                         <a href="{{ $item->url }}">
+                             <img src="{{ asset('storage/sbcimages/' . $item->sbc_image) }}" alt="{{ $item->image_title }}"
+                                 style="width: 100%; ">
+                             <div class="py-2 text-center">
+                                 {{ $item->button_name }}
+                             </div>
+                         </a>
+                     </div>
                  </div>
-             </div>
-             <div class="col-lg-3 mb-5">
-                 <div class="shadow p-2 border">
-                     <a href="{{ asset('/') }}">
-                         <img src="{{ asset('images/earring.jpg') }}" alt="" style="width: 100%;">
-                         <div class="py-2 text-center">
-                             Earring
-                         </div>
-                     </a>
-                 </div>
-             </div>
-             <div class="col-lg-3 mb-5">
-                 <div class="shadow p-2 border">
-                     <a href="{{ asset('/') }}">
-                         <img src="{{ asset('images/pendant.jpg') }}" alt="" style="width: 100%;">
-                         <div class="py-2 text-center">
-                             Pendant
-                         </div>
-                     </a>
-                 </div>
-             </div>
-             <div class="col-lg-3 mb-5">
-                 <div class="shadow p-2 border">
-                     <a href="{{ asset('/') }}">
-                         <img src="{{ asset('images/necklace.jpg') }}" alt="" style="width: 100%;">
-                         <div class="py-2 text-center">
-                             Necklace
-                         </div>
-                     </a>
-                 </div>
-             </div>
+             @endforeach
 
          </div>
      </div>

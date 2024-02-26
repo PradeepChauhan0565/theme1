@@ -14,7 +14,7 @@
     <br>
     <br>
     <br>
-    <p>If you want to unsubscribe <a href="http://192.168.1.12:8000/unsubscribe/{{ $email }}">click here for
+    <p>If you want to unsubscribe <a href="http://192.168.30.103:8000/unsubscribe/{{ $email }}">click here for
             unsubscribe</a></p>
 </body>
 

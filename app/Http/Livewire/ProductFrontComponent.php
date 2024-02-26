@@ -12,6 +12,7 @@ use App\Models\DiamondShape;
 use App\Models\MetalColor;
 use App\Models\MetalType;
 use App\Models\ProductDetail;
+use App\Models\SubCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -35,25 +36,30 @@ class ProductFrontComponent extends Component
     public $allProducts;
 
     public $categoryTypes = [];
-    public $categories = [];
+    public $f_sub_categories = [];
+    public $subSategories = [];
     public $colorType;
     public $colorTypeAll = "any";
     public $puritiesAll = "any";
     public $purities = [];
     public $metalType = [];
-    public $diamondAll = "0-7";
+    public $diamondAll = "0-10";
     public $diamond = [];
-    public $stoneShapes = [];
+    public $diastoneShapes = [];
     public $price = [];
-    public $priceAll = "any";
+
 
 
     public function mount($category, $category_type, $sub_category, $search)
     {
-        $this->category = $category;
-        $this->category_type = $category_type;
-        $this->sub_category = $sub_category;
-        $this->search = $search;
+        if ($search) {
+            $this->search = $search;
+        } else {
+            $this->category = $category;
+            $this->category_type = $category_type;
+            $this->sub_category = $sub_category;
+            $this->f_sub_categories = SubCategory::where('category_id', $this->category->id)->pluck('name', 'id')->toArray();
+        }
     }
     public function addToWishlist($productId)
     {
@@ -121,35 +127,27 @@ class ProductFrontComponent extends Component
         if ($this->colorTypeAll) {
             $this->colorType = null;
         }
-
-        // if ($this->priceAll) {
-        //     $this->price = [];
-        // }
-        // if ($this->price) {
-        //     $this->priceAll = null;
-        // }
         $this->resetPage();
     }
     public function resetFilter($key, $type)
     {
-        // if ($type == 'category') {
-        //     $this->categories[$key] = false;
-        // }
-        // if ($type == 'shape') {
-        //     $this->stoneShapes[$key] = false;
-        // }
+        if ($type == 'subcategory') {
+            $this->subSategories[$key] = false;
+        }
+        if ($type == 'shape') {
+            $this->diastoneShapes[$key] = false;
+        }
         if ($type == 'metal') {
             $this->metalType[$key] = false;
         }
-        // if ($type == 'dia') {
-        //     $this->diamond[$key] = false;
-        // }
+        if ($type == 'dia') {
+            $this->diamond[$key] = false;
+        }
         if ($type == 'metal_color') {
             $this->colorType = null;
         }
 
         if ($type == 'kt') {
-            // $this->purities = [];
             $this->purities[$key] = false;
         }
         if ($type == 'price') {
@@ -160,8 +158,8 @@ class ProductFrontComponent extends Component
 
     public function resetFilterAll()
     {
-        $this->categories = [];
-        $this->stoneShapes = [];
+        $this->subSategories = [];
+        $this->diastoneShapes = [];
         $this->metalType = [];
         $this->purities = [];
         $this->price = [];
@@ -174,20 +172,29 @@ class ProductFrontComponent extends Component
         $products = [];
         $metal_ids = [];
         foreach ($this->metalType as $mt) {
-            if ($mt)
+            if ($mt) {
                 $metal_ids[] =  $mt;
+            }
         }
         $purities_ids = [];
         $product_ids = [];
         foreach ($this->purities as $mp) {
-            if ($mp)
+            if ($mp) {
                 $purities_ids[] =  $mp;
+            }
+        }
+        $dia_ids = [];
+        foreach ($this->diastoneShapes as $dshape) {
+            if ($dshape) {
+                $dia_ids[] =  $dshape;
+            }
         }
 
 
         if ($this->search) {
             $this->search = $this->search;
         }
+
         if ($this->sub_category) {
             $product_ids = ProductCategory::where('category_id', $this->category->id)
                 ->where('sub_category_header_id', $this->category_type->id)
@@ -214,20 +221,23 @@ class ProductFrontComponent extends Component
                 );
             })
             ->when(count($metal_ids) > 0, function ($query) use ($metal_ids) {
-
                 $query->whereHas('materials', function ($query) use ($metal_ids) {
                     $query->whereIn('metal_id', $metal_ids)->where('material_type_id', 2);
                 });
             })
+            ->when(count($dia_ids) > 0, function ($query) use ($dia_ids) {
+                $query->whereHas('materials', function ($query) use ($dia_ids) {
+                    $query->whereIn('shape_id', $dia_ids);
+                });
+            })
             ->when(count($purities_ids) > 0, function ($query) use ($purities_ids) {
-
                 $query->whereHas('materials', function ($query) use ($purities_ids) {
                     $query->whereIn('quality_id', $purities_ids)->where('material_type_id', 2);
                 });
             })
-            // ->when(count($product_ids) > 0, function ($query) use ($product_ids) {
-            //     $query->whereIn('products.id', $product_ids);
-            // })
+            ->when(count($product_ids) > 0, function ($query) use ($product_ids) {
+                $query->whereIn('products.id', $product_ids);
+            })
             ->when($this->sortBy == 'highest', function ($query) {
                 $query->orderBy('regular_price', 'desc');
             })
@@ -245,7 +255,33 @@ class ProductFrontComponent extends Component
             })
             ->when($this->sortBy == 'zToA', function ($query) {
                 $query->orderBy('name', $this->sortDirectionZToA);
+            })
+
+            ->when($this->category, function ($query) {
+                $query->whereHas('categories', function ($query) {
+                    $query->where('categories.id', $this->category->id);
+                });
+            })
+
+
+            ->when(count($this->subSategories) > 0, function ($query) {
+                $ids = array_filter($this->subSategories, function ($value) {
+                    return $value !== false;
+                });
+                if (count($ids) > 0) {
+                    $query->whereHas('subSategories', function ($query) {
+                        $ids = [];
+                        foreach ($this->subSategories as $sub_category) {
+                            if ($sub_category) {
+                                $ids[] = $sub_category;
+                            }
+                        }
+                        $query->whereIn('sub_categories.id', $ids);
+                    });
+                }
             });
+
+
 
         if (count($this->price) > 0) {
             $products->where(function ($query) {
@@ -272,21 +308,31 @@ class ProductFrontComponent extends Component
         }
 
         if (count($this->diamond) > 0) {
+            $product_ids = [];
             foreach ($this->diamond as $p1) {
                 if ($p1) {
                     $diamond = explode("-", $p1);
                     $diamond1 = (int)$diamond[0];
                     $diamond2 = (int)$diamond[1];
                     $product_dia_id = ProductDetail::whereBetween('weight', [$diamond1, $diamond2])
-                        ->whereId('material_type_id', 3)->toArray();
+                        ->where('material_type_id', 3)
+                        ->pluck('product_id')->toArray();
+
                     $product_ids = array_merge($product_ids, $product_dia_id);
                 }
             }
+            $products =  $products->when(count($product_ids) > 0, function ($query) use ($product_ids) {
+                $query->whereIn('products.id', $product_ids);
+            });
+            $products =  $products->when(count($product_ids) == 0, function ($query) use ($product_ids) {
+                $query->whereIn('products.id', [0]);
+            });
+
             $this->diamondAll = false;
         } else {
-            $this->diamondAll = '0-7';
+            $this->diamondAll = '0-10';
         }
-        $products = $products->paginate(20);
+        $products = $products->where('status', 1)->paginate(20);
         return view('livewire.product-front-component', [
             'metalPurities' => MetalPurity::orderBy('order_by')->where('status', 1)->pluck('code', 'id')->toArray(),
             'dstoneShapes' => DiamondShape::orderBy('order_by')->where('status', 1)->pluck('code', 'id')->toArray(),

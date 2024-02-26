@@ -1,50 +1,4 @@
-<style>
-    .container-1 {
-        width: 90%;
-        margin: auto;
-    }
-
-    .line-footer li {
-        list-style: none;
-    }
-
-    .line-footer li a:hover {
-        color: rgb(1, 1, 104);
-        font-style: italic;
-    }
-
-    .line-footer li a {
-        position: relative;
-        text-decoration: none;
-        color: #071d49;
-
-    }
-
-    .line-footer li a::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 1px;
-        left: 0;
-        bottom: -5px;
-        background-color: #071d49;
-
-        transform: scale(0, 1);
-        transition: transform 0.7s ease;
-    }
-
-    .line-footer li a:hover::after {
-        transform: scale(1, 1);
-    }
-
-
-    .line-footer {
-        padding-left: 0;
-    }
-</style>
-
 <!-------subscribe modal start----------------------->
-
 <div id="exampleModalCenter" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -53,7 +7,7 @@
                 <h3 class=" py-2">Thank You!</h3>
                 <div id="newsletter"></div>
                 <div class="close position-absolute " data-bs-dismiss="modal"
-                    style="top:0px; right:0; cursor: pointer; font-size:24px; padding:0px 13px; background-color:#071d49;"
+                    style="top:0px; right:0; cursor: pointer; font-size:24px; padding:0px 13px; background-color:var(--default-color);"
                     aria-label="Close">
                     <span aria-hidden="true" class="text-white">&times;</span>
                 </div>
@@ -64,7 +18,7 @@
 
 <!-------subscribe end----------------------->
 
-<div class="mb-5" style="background-color: #071d49;">
+<div class="mb-5" style="background-color: var(--default-color);">
     <div class="container-1">
         <div class="row  justify-content-center align-items-center  ">
             <div class="col-lg-6">
@@ -83,7 +37,7 @@
                         @enderror
                         <button id="subscribbtn" class="  position-absolute px-4 px-lg-5 py-2 rounded-pill border:0;"
                             type="submit"
-                            style="color:#fff; right:1px; border:0; top:1px; z-index:1; background-color:#071d49;">
+                            style="color:#fff; right:1px; border:0; top:1px; z-index:1; background-color:var(--default-color);">
                             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"
                                 style="color:#fff;"></span>
                             <span class="btn-txt" style="color:#fff;">JOIN US</span>
@@ -98,7 +52,7 @@
     <div class="container-1">
         <div class="pb-4 row g-4">
             <div class=" col-lg-3">
-                <h5 style="border-bottom: 1px solid #071d49;padding:8px 0;">CUSTOMER SERVICE</h5>
+                <h5 style="border-bottom: 1px solid; var(--default-color);padding:8px 0;">CUSTOMER SERVICE</h5>
                 <ul class=" mt-3 line-footer ">
                     <li class="mb-2"><a href="">FAQs</a></li>
                     <li class="mb-2"><a href="">Track Your Order</a></li>
@@ -108,7 +62,7 @@
             </div>
 
             <div class=" col-lg-3">
-                <h5 style="border-bottom: 1px solid #071d49;padding:8px 0;"> ABOUT US</h5>
+                <h5 style="border-bottom: 1px solid; var(--default-color);padding:8px 0;"> ABOUT US</h5>
                 <ul class=" mt-3 line-footer ">
                     <li class="mb-2"><a href="">About Jewelry</a></li>
                     <li class="mb-2"><a href="">Customer Reviews</a></li>
@@ -119,7 +73,7 @@
             </div>
 
             <div class=" col-lg-3">
-                <h5 style="border-bottom: 1px solid #071d49;padding:8px 0;">WHY JEWELRY?</h5>
+                <h5 style="border-bottom: 1px solid; var(--default-color);padding:8px 0;">WHY JEWELRY?</h5>
                 <ul class=" mt-3 line-footer ">
                     <li class="mb-2"><a href="">24/7 Customer Support</a></li>
                     <li class="mb-2"><a href="">Free Returns</a></li>
@@ -132,7 +86,7 @@
             </div>
 
             <div class=" col-lg-3">
-                <h5 style="border-bottom: 1px solid #071d49;padding:8px 0;"> 24/7 CUSTOMER SUPPORT</h5>
+                <h5 style="border-bottom: 1px solid; var(--default-color);padding:8px 0;"> 24/7 CUSTOMER SUPPORT</h5>
                 <ul class=" mt-3 line-footer ">
                     <li class="mb-2"><a href="tel:{{ $contacts->mobile_number }}"><i
                                 class="fa-solid fa-phone-flip"></i>&nbsp;
@@ -143,7 +97,8 @@
                     <li class="mb-2">FOLLOW US ON</li>
                     <div class="d-flex ">
                         @foreach ($socials as $item)
-                            <a href="{{ $item->link }}" title="{{ $item->name }}">
+                            <a style="color:var(--default-color);" href="{{ $item->link }}"
+                                title="{{ $item->name }}" target="_blank">
                                 <div class="  p-2 border mx-1 "><i class="{{ $item->icon }}"></i></div>
                             </a>
                         @endforeach

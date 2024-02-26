@@ -1,19 +1,86 @@
 <div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css') }}" />
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css') }}" />
+    <style>
+        .slick-prev,
+        .slick-next {
+            font-size: 19px;
+            color: #000;
+            background-color: rgb(189, 180, 180);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            border: none;
+            outline: none;
+        }
 
+        .slick-prev {
+            left: 10px;
+            z-index: 1;
+        }
 
-    <div>
-        <img src="{{ asset('images/2.png') }}" alt="" style="width:100%;">
+        .slick-prev:before {
+            content: '';
+        }
+
+        .slick-next:before {
+            content: '';
+        }
+
+        .slick-next {
+            right: 10px;
+        }
+    </style>
+    <div class="position-relative">
+        @if ($category != null)
+            <img src="{{ asset('storage/categorybanners/' . $category->banner) }}" alt="{{ $category->image_title }}"
+                style="width: 100%">
+        @endif
+        <nav aria-label="breadcrumb" class="py-1 ">
+            <ol class="breadcrumb"
+                style="margin-bottom: 0rem; font-size:12px;   position:absolute; top:5px; left:60px; var(--default-color)">
+                <li class="breadcrumb-item"><a href="{{ asset('/') }}">Home</a></li>
+                @if ($category != null)
+                    <li class="breadcrumb-item text-capitalize" aria-current="page">shop / {{ $category->name }}</li>
+                @endif
+                @if ($category_type != null)
+                    <li class="breadcrumb-item text-capitalize" aria-current="page">{{ $category_type->name }}</li>
+                @endif
+                @if ($sub_category != null)
+                    <li class="breadcrumb-item text-capitalize" aria-current="page">{{ $sub_category->name }}</li>
+                @endif
+                @if ($search != null)
+                    <li class="breadcrumb-item text-capitalize" aria-current="page">Search Results Page</li>
+                @endif
+            </ol>
+        </nav>
     </div>
-
-
+    @if ($search != null)
+        <div class="text-center mt-5">
+            @if (count($products) > 0)
+                <h2>{{ count($products) }} Search Results For</h2>
+                <h5>&#10077; {{ $search }} &#10078;</h5>
+            @else
+                <div class="text-center my-3">
+                    <img src="{{ url('images/search.png') }}" alt="search" style="width:100px;">
+                </div>
+                <h3>We could not find what you are looking for.</h3>
+                <a href="{{ asset('/') }}"><button class="px-5 mt-4 py-1"
+                        style="background-color: var(--default-color);border:none;border-radius:5px; font-size:22px; color:#fff;">Shop
+                        Now</button></a>
+            @endif
+        </div>
+    @endif
     <div class="mx-auto " style="width:90%;padding-bottom: 30px; padding-top:20px;">
         <div class="row mb-4 g-3 ">
             <div class="col-lg-10">
                 <div class="d-none d-lg-block">
                     <h6 class="text-xl mb-3">FILTER BY</h6>
-
                     <div class="row g-2 ">
                         <div class="col-lg-3">
                             <div class="dropdown">
@@ -34,8 +101,8 @@
                                                 </div> --}}
 
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" wire:model="price.1"
-                                                value="0-10000" id="customCheckPrice1">
+                                            <input wire:change="filter" class="form-check-input" type="checkbox"
+                                                wire:model="price.1" value="0-10000" id="customCheckPrice1">
                                             <label class="form-check-label" for="customCheckPrice1">
                                                 Below - <i class="fa-solid fa-indian-rupee-sign"></i> 10000
                                             </label>
@@ -91,9 +158,11 @@
                                     @foreach ($metal as $metal_key => $metal_item)
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" wire:change="filter"
-                                                wire:model="metalType.{{ $metal_key }}" value="{{ $metal_key }}"
+                                                wire:model="metalType.{{ $metal_key }}"
+                                                value="{{ $metal_key }}"
                                                 id="flexCheckDefault{{ $metal_key }}">
-                                            <label class="form-check-label" for="flexCheckDefault{{ $metal_key }}">
+                                            <label class="form-check-label" for="flexCheckDefault{{ $metal_key }}"
+                                                style="text-transform:capitalize;">
                                                 {{ $metal_item }}
                                             </label>
                                         </div>
@@ -112,7 +181,8 @@
                                     @foreach ($metalPurities as $p_key => $item)
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" wire:change="filter"
-                                                wire:model="purities.{{ $p_key }}" value="{{ $p_key }}"
+                                                wire:model="purities.{{ $p_key }}"
+                                                value="{{ $p_key }}"
                                                 id="flexCheckDefaultt{{ $p_key }}">
                                             <label class="form-check-label"
                                                 for="flexCheckDefaultt{{ $p_key }}">
@@ -143,34 +213,33 @@
                     @php
                         $f_ctr = 0;
                     @endphp
-                    {{-- @foreach ($categories as $f_key => $fc)
-                                @php
-                                    if ($fc == false) {
-                                        continue;
-                                    }
-                                    $f_ctr++;
-                                @endphp
-                                <button wire:click="resetFilter({{ $f_key }},'category')"
-                                    class="border px-2 mx-2 d-flex align-items-center"
-                                    style="font-size:12px; color:#071d49;">{{ $f_sub_categories[$f_key] }} <span
-                                        style="font-size:12px; padding-left:4px;color:red;">&#10005;</span></button>
-                            @endforeach --}}
+                    @foreach ($subSategories as $f_key => $fc)
+                        @php
+                            if ($fc == false) {
+                                continue;
+                            }
+                            $f_ctr++;
+                        @endphp
+                        <button wire:click="resetFilter({{ $f_key }},'subcategory')"
+                            class="border px-2 mx-2 d-flex align-items-center remove-btn">{{ $f_sub_categories[$f_key] }}
+                            <span>&#10005;</span></button>
+                    @endforeach
 
-                    {{-- @foreach ($stoneShapes as $shape_key => $shape)
-                                @php
-                                    if (!$shape) {
-                                        continue;
-                                    }
-                                    $f_ctr++;
-                                @endphp
-                                <button wire:click="resetFilter({{ $shape_key }},'shape')"
-                                    class="border px-2 mx-2 d-flex align-items-center"
-                                    style="font-size:12px; color:#071d49;">
-                                    {{ $dstoneShapes[$shape_key] }}
-                                    <span style="font-size:12px; padding-left:4px;color:red;">&#10005;</span>
-                                </button>
-                            @endforeach --}}
+                    @foreach ($diastoneShapes as $shape_key => $shape)
+                        @php
+                            if (!$shape) {
+                                continue;
+                            }
+                            $f_ctr++;
+                        @endphp
+                        <button wire:click="resetFilter({{ $shape_key }},'shape')"
+                            class="border px-2 mx-2 d-flex align-items-center remove-btn">
+                            {{ $dstoneShapes[$shape_key] }}
+                            <span>&#10005;</span>
+                        </button>
+                    @endforeach
                     @if ($price)
+
                         @foreach ($price as $price_key => $price)
                             @php
                                 if (!$price) {
@@ -179,10 +248,9 @@
                                 $f_ctr++;
                             @endphp
                             <button wire:click="resetFilter({{ $price_key }},'price')"
-                                class="border px-2 m-2 d-flex align-items-center"
-                                style="font-size:14px; color:#071d49;">
+                                class="border px-2 m-2 d-flex align-items-center remove-btn">
                                 {{ $price }}
-                                <span style="font-size:12px; padding-left:4px;color:red;">&#10005;</span>
+                                <span>&#10005;</span>
                             </button>
                         @endforeach
                     @endif
@@ -195,9 +263,9 @@
                             $f_ctr++;
                         @endphp
                         <button wire:click="resetFilter({{ $mtl_key }},'metal')"
-                            class="border px-2 m-2 d-flex align-items-center" style="font-size:12px; color:#071d49;">
+                            class="border px-2 m-2 d-flex align-items-center remove-btn">
                             {{ $metal[$mtl_key] }}
-                            <span style="font-size:12px; padding-left:4px;color:red;">&#10005;</span>
+                            <span>&#10005;</span>
                         </button>
                     @endforeach
 
@@ -209,9 +277,9 @@
                             $f_ctr++;
                         @endphp
                         <button wire:click="resetFilter({{ $prty_key }},'kt')"
-                            class="border px-2 m-2 d-flex align-items-center" style="font-size:12px; color:#071d49;">
+                            class="border px-2 m-2 d-flex align-items-center remove-btn">
                             {{ $metalPurities[$prty_key] }}
-                            <span style="font-size:12px; padding-left:4px;color:red;">&#10005;</span>
+                            <span>&#10005;</span>
                         </button>
                     @endforeach
                     @php
@@ -219,35 +287,30 @@
                     @endphp
                     @if ($colorType)
                         <button wire:click="resetFilter('{{ $colorType }}','metal_color')"
-                            class="border px-2 m-2 d-flex align-items-center" style="font-size:14px; color:#071d49;">
+                            class="border px-2 m-2 d-flex align-items-center remove-btn">
                             {{ $color_type_array[$colorType] ?? '' }}
-                            <span style="font-size:12px; padding-left:4px;color:red;">&#10005;</span>
+                            <span>&#10005;</span>
                         </button>
                     @endif
 
-                    {{-- @foreach ($diamond as $diamond_key => $dia)
-                                @php
-                                    if (!$dia) {
-                                        continue;
-                                    }
-                                    $f_ctr++;
-                                @endphp
-                                <button wire:click="resetFilter({{ $diamond_key }},'dia')"
-                                    class="border px-2 mx-2 d-flex align-items-center"
-                                    style="font-size:12px; color:#071d49;">
-                                    {{ $dia }}
-                                    <span style="font-size:12px; padding-left:4px;color:red;">&#10005;</span>
-                                </button>
-                            @endforeach --}}
-                    {{-- <button class="border px-2 mx-2 d-flex align-items-center"
-                                style="font-size:12px; color:#071d49;">
-                               
-                                <span style="font-size:12px; padding-left:4px;color:red;">&#10005;</span>
-                            </button> --}}
+                    @foreach ($diamond as $diamond_key => $dia)
+                        @php
+                            if (!$dia) {
+                                continue;
+                            }
+                            $f_ctr++;
+                        @endphp
+                        <button wire:click="resetFilter({{ $diamond_key }},'dia')"
+                            class="border px-2 mx-2 d-flex align-items-center remove-btn">
+                            {{ $dia }}
+                            <span>&#10005;</span>
+                        </button>
+                    @endforeach
+
                     @if ($f_ctr > 1)
-                        <button class="border px-2 m-2  d-flex align-items-center"
-                            style="font-size:12px; color:#071d49;" wire:click="resetFilterAll()">Clear all
-                            <span style="font-size:12px; padding-left:4px; color:red;">&#10005;</span></button>
+                        <button class="border px-2 m-2  d-flex align-items-center remove-btn"
+                            wire:click="resetFilterAll()">Clear all
+                            <span>&#10005;</span></button>
                     @endif
                 </div>
             </div>
@@ -268,6 +331,7 @@
             </div>
         </div>
 
+
         <div class="row position-relative g-4">
             <div>
                 @if (session()->has('message'))
@@ -286,49 +350,32 @@
                 @foreach ($products as $product)
                     <div class="col-lg-4 col-md-6 g-4">
                         <div class="position-relative product border">
+                            <div class="productslider" wire:ignore>
+                                @if (count($product->images) > 0)
+                                    @foreach ($product->images as $productImage)
+                                        <div> <img src="{{ asset('storage/' . $productImage->url) }}" alt=""
+                                                style="width: 100%;">
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <img src="{{ asset('images/noimage.jpg') }}" alt="No Image"
+                                        style="width: 100%;">
+                                @endif
+                            </div>
                             <a wire:click="recentView({{ $product->id }})"
                                 href="{{ route('single', [$product->slug]) }}" target="_blank"
                                 style="text-decoration: none;">
-                                @if (empty($product->image_url))
-                                    <img src="{{ asset('images/noimage.jpg') }}" alt=""
-                                        style="width: 100%;">
-                                @else
-                                    <img src="{{ asset('storage/' . $product->image_url) }}" alt=""
-                                        style="width: 100%;">
-                                @endif
-
                                 <div class="bg-white text-black p-2">
-                                    <p>{{ $product->name }} </p>
-                                    <p><i class="fa-solid fa-indian-rupee-sign"></i> {{ $product->regular_price }}</p>
-                                    <div class="text-center "style="background-color: #071d49;"><button
-                                            class="p-1 border-0  text-white"
-                                            style="background-color: #071d49;">Discover
+                                    <p style="color:var(--default-color)">{{ $product->name }} </p>
+                                    <p style="color:var(--default-color)"><i
+                                            class="fa-solid fa-indian-rupee-sign"></i>
+                                        {{ $product->regular_price }}
+                                    </p>
+                                    <div class="text-center "><button class="p-1 border-0 w-100 text-white"
+                                            style="background-color:var(--default-color)">Discover
                                             more</button></div>
                                 </div>
                             </a>
-                            {{-- <div class="position-absolute   top-0 left-0">
-                                <div class=" details ">
-                                    <div class="position-relative">
-                                        <div class="productwrapper  transition delay-700 duration-300 ease-in-out">
-                                            <div><img src="{{ asset('images/new_ring.png') }}" alt=""
-                                                    style="width: 100%;"> </div>
-
-                                        </div>
-                                        <div class="position-absolute "
-                                            style="left:-3px; top: 50%;  transform: translate(-50%);"><a
-                                                class=" px-2 py-3" id="next"
-                                                style="cursor: pointer; background-color:rgb(226, 230, 230);"><i
-                                                    class="fas fa-angle-left"></i></a> </div>
-                                        <div class="position-absolute "
-                                            style="right:-24px; top: 50%;  transform: translate(-50%);"><a
-                                                class=" px-2 py-3" id="prev"
-                                                style="cursor: pointer; background-color:rgb(226, 230, 230);"><i
-                                                    class="fas fa-angle-right"></i></a> </div>
-
-                                    </div>
-
-                                </div>
-                            </div> --}}
 
                             @auth
                                 @if (App\Models\Wishlist::where('user_id', auth()->user()->id)->where('product_id', $product->id)->exists())
@@ -336,7 +383,8 @@
                                         style="left:2px; top:2px; font-size:28px; z-index:2;">
                                         <button wire:click="removeToWishlist({{ $product->id }})"
                                             title="Remove to wishlist" class="border-0 px-2 bg-transparent">
-                                            <span wire:loading.remove wire:target="removeToWishlist({{ $product->id }})">
+                                            <span wire:loading.remove wire:target="removeToWishlist({{ $product->id }})"
+                                                style="color:var(--default-color)">
                                                 <i class="fas fa-heart"></i>
                                             </span>
                                             <span wire:loading wire:target="removeToWishlist({{ $product->id }})">
@@ -350,7 +398,7 @@
                                     <button wire:click="addToWishlist({{ $product->id }})"
                                         class="position-absolute border-0 px-2 bg-transparent  text-2xl "
                                         title="Add to wishlist"
-                                        style="cursor:pointer; left:2px; top:2px; font-size:28px;z-index:2;">
+                                        style="cursor:pointer; left:2px; top:2px; font-size:28px;z-index:2; color:var(--default-color)">
                                         <span wire:loading.remove wire:target="addToWishlist({{ $product->id }})"><i
                                                 class="far fa-heart"></i></span>
                                         <span wire:loading wire:target="addToWishlist({{ $product->id }})">
@@ -379,19 +427,6 @@
                     </div>
                 @endforeach
             @else
-                {{-- <div class="relative product">
-                <img src="images/chill1.jpg" alt="" style="width: 100%;">
-                <div class="absolute border border-black z-10 top-0 left-0">
-                    <div class="grid-cols-4 details">
-                        <div><img src="images/product1.jpg" alt="" style="width: 100%;"> </div>
-                        <div class="bg-white p-2">
-                            <p class="pb-2">Jewellery-dropdown-panel </p>
-                            <p class="pb-2">Rs.18000</p>
-                            <div class="text-center  text-white bg-black"><button class="p-1">Discover more</button></div>
-                        </div>                        
-                    </div>              
-                </div>
-            </div>   --}}
                 <div class="text-center">
                     <img src="{{ asset('images/product not found.jpg') }}" alt="" style="width:200px;">
                 </div>
@@ -405,13 +440,15 @@
         </div>
         <div class="ft-toolbar d-lg-none">
             <div class="d-flex justify-content-between ">
-                <div class="py-2 col-6 d-flex justify-content-center align-items-center " data-bs-toggle="offcanvas"
+                <div style="color:var(--default-color)"
+                    class="py-2 col-6 d-flex justify-content-center align-items-center " data-bs-toggle="offcanvas"
                     data-bs-target="#filterDrawer" aria-controls="filterDrawer"style="cursor: pointer;">
 
                     <i class="fa-solid fa-filter mx-1"></i>FILTER
 
                 </div>
-                <div class=" col-6 d-flex justify-content-center align-items-center" data-bs-toggle="offcanvas"
+                <div style="color:var(--default-color)"
+                    class=" col-6 d-flex justify-content-center align-items-center" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom"style="cursor: pointer;"><i
                         class="fa-solid fa-sort mx-1"></i>SORT
                     BY
@@ -424,7 +461,8 @@
         <div wire:ignore class="offcanvas offcanvas-start" tabindex="-1" id="filterDrawer"
             aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasExampleLabel">FILTER BY</h5>
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel" style="color:var(--default-color)">FILTER BY
+                </h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                     aria-label="Close"></button>
             </div>
@@ -432,8 +470,8 @@
                 <div id="accordion">
                     <div class="card">
                         <div class="card-header">
-                            <a class="card-link accordion-title" data-toggle="collapse" href="#collapseOne"
-                                style="color:#071d49; text-decoration:none;">
+                            <a class="card-link accordion-title " data-toggle="collapse" href="#collapseOne"
+                                style="color:var(--default-color); text-decoration:none;">
                                 PRICE
                             </a>
                         </div>
@@ -485,28 +523,26 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <a class="collapsed card-link accordion-title" data-toggle="collapse" href="#collapseTwo"
-                                style="color:#071d49; text-decoration:none;">
-                                PRODUCT TYPE
-                            </a>
-                        </div>
-                        <div id="collapseTwo" class="collapse collapseborder" data-parent="#accordion">
-                            <div class="card-body">
-                                @if ($category)
+                    @if ($category)
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="collapsed card-link accordion-title" data-toggle="collapse"
+                                    href="#collapseTwo" style="color:var(--default-color); text-decoration:none;">
+                                    PRODUCT TYPE
+                                </a>
+                            </div>
+                            <div id="collapseTwo" class="collapse collapseborder" data-parent="#accordion">
+                                <div class="card-body">
                                     <div class="sidebar-single" style="padding-top: 12px">
                                         <div class="sidebar-body">
                                             <ul class="checkbox-container categories-list">
                                                 @foreach ($category->categoryTypes as $item)
-                                                    <h6 class="mb-3" style="cursor: pointer"
-                                                        wire:click="showCategory({{ $item->id }})">
+                                                    <h6 class="mb-3">
                                                         {{ $item->name }}</h6>
                                                     @foreach ($item->subCategory as $sb)
                                                         <div class="form-check">
                                                             <input type="checkbox" class="form-check-input"
-                                                                wire:model="categories.{{ $sb->id }}"
+                                                                wire:model="subSategories.{{ $sb->id }}"
                                                                 wire:change="filter" class="custom-control-input"
                                                                 id="flexCheckCategory{{ $sb->id }}"
                                                                 name="category" value="{{ $sb->id }}">
@@ -521,15 +557,14 @@
                                             </ul>
                                         </div>
                                     </div>
-                                @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
-
+                    @endif
                     <div class="card">
                         <div class="card-header">
                             <a class="collapsed card-link accordion-title" data-toggle="collapse"
-                                href="#collapseThree" style="color:#071d49; text-decoration:none;">
+                                href="#collapseThree" style="color:var(--default-color); text-decoration:none;">
                                 METAL
                             </a>
                         </div>
@@ -540,7 +575,9 @@
                                         <input class="form-check-input" type="checkbox" wire:change="filter"
                                             wire:model="metalType.{{ $metal_key }}" value="{{ $metal_key }}"
                                             id="flexCheckDefault{{ $metal_key }}">
-                                        <label class="form-check-label" for="flexCheckDefault{{ $metal_key }}">
+                                        <label class="form-check-label text-capitalize "
+                                            style="text-transform:capitalize;"
+                                            for="flexCheckDefault{{ $metal_key }}">
                                             {{ $metal_item }}
                                         </label>
                                     </div>
@@ -551,7 +588,7 @@
                     <div class="card">
                         <div class="card-header">
                             <a class="collapsed card-link accordion-title" data-toggle="collapse"
-                                href="#collapseFour" style="color:#071d49; text-decoration:none;">
+                                href="#collapseFour" style="color:var(--default-color); text-decoration:none;">
                                 METAL COLOR
                             </a>
                         </div>
@@ -588,7 +625,7 @@
                     <div class="card">
                         <div class="card-header">
                             <a class="collapsed card-link accordion-title" data-toggle="collapse"
-                                href="#collapseFive" style="color:#071d49; text-decoration:none;">
+                                href="#collapseFive" style="color:var(--default-color); text-decoration:none;">
                                 GOLD PURITY
                             </a>
                         </div>
@@ -611,7 +648,7 @@
                     <div class="card">
                         <div class="card-header">
                             <a class="collapsed card-link accordion-title" data-toggle="collapse" href="#collapseSix"
-                                style="color:#071d49; text-decoration:none;">
+                                style="color:var(--default-color); text-decoration:none;">
                                 DIAMOND
                             </a>
                         </div>
@@ -663,7 +700,7 @@
                     <div class="card">
                         <div class="card-header">
                             <a class="collapsed card-link accordion-title" data-toggle="collapse"
-                                href="#collapseSeven" style="color:#071d49; text-decoration:none;">
+                                href="#collapseSeven" style="color:var(--default-color); text-decoration:none;">
                                 STONE SHAPE
                             </a>
                         </div>
@@ -672,9 +709,10 @@
                                 @foreach ($dstoneShapes as $p_key => $item)
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" wire:change="filter"
-                                            wire:model="stoneShapes.{{ $p_key }}" value="{{ $p_key }}"
-                                            id="flexCheckShape{{ $p_key }}">
-                                        <label class="form-check-label" for="flexCheckShape{{ $p_key }}">
+                                            wire:model="diastoneShapes.{{ $p_key }}"
+                                            value="{{ $p_key }}" id="flexCheckShape{{ $p_key }}">
+                                        <label class="form-check-label text-capitalize"
+                                            for="flexCheckShape{{ $p_key }}">
                                             {{ $item }}
                                         </label>
                                     </div>
@@ -686,16 +724,12 @@
                 <div class="p-4">
                     <div class="row g-2">
                         <div class="col-6">
-                            @if ($f_ctr > 1)
-                                <button data-bs-dismiss="offcanvas" aria-label="Close" type="button"
-                                    class="btn bg-secondary text-white w-100" wire:click="resetFilterAll()">Clear
-                                    all
-                                </button>
-                            @endif
+
                         </div>
                         <div class="col-6">
                             <button data-bs-dismiss="offcanvas" aria-label="Close" type="button"
-                                class="btn btn-primary w-100" style="background-color: #071d49;color:#fff;">Show
+                                class="btn btn-primary w-100"
+                                style="background-color: var(--default-color);color:#fff;">Show
                                 Results</button>
                         </div>
                     </div>
@@ -723,7 +757,7 @@
                 </select>
                 <div class="d-flex justify-content-end mt-5">
                     <button data-bs-dismiss="offcanvas" aria-label="Close" type="button"
-                        class="btn btn-primary w-50" style="background-color: #071d49;color:#fff;">Show
+                        class="btn btn-primary w-50" style="background-color:var(--default-color);color:#fff;">Show
                         Results</button>
                 </div>
             </div>
@@ -734,80 +768,21 @@
 
 
 
-    <script>
-        // ------------next pre jq--------------------
-
-        $(document).ready(function() {
-            $(".productwrapper div").each(function(e) {
-                if (e != 0)
-                    $(this).hide();
-            });
-
-            $("#next").click(function() {
-                if ($(".productwrapper div:visible").next().length != 0)
-                    $(".productwrapper div:visible").next().show().prev().hide();
-                else {
-                    $(".productwrapper div:visible").hide();
-                    $(".productwrapper div:first").show();
-                }
-                return false;
-            });
-
-            $("#prev").click(function() {
-                if ($(".productwrapper div:visible").prev().length != 0)
-                    $(".productwrapper div:visible").prev().show().next().hide();
-                else {
-                    $(".productwrapper div:visible").hide();
-                    $(".productwrapper div:last").show();
-                }
-                return false;
-            });
-        });
-    </script>
-
 
     {{-- ---------------range filter jq------------ --}}
 
+
+    <script src="{{ asset('https://code.jquery.com/jquery-3.6.4.min.js') }}"></script>
+    <script src="{{ asset('https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js') }}"></script>
     <script>
-        const rangeInput = document.querySelectorAll(".range-input input"),
-            priceInput = document.querySelectorAll(".price-input input"),
-            range = document.querySelector(".slider .progress");
-        let priceGap = 0;
-        priceInput.forEach(input => {
-            input.addEventListener("input", e => {
-                let minPrice = parseInt(priceInput[0].value),
-                    maxPrice = parseInt(priceInput[1].value);
-                if ((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInput[1].max) {
-                    if (e.target.className === "input-min") {
-                        rangeInput[0].value = minPrice;
-                        range.style.left = ((minPrice / rangeInput[0].max) * 100) + "%";
-                    } else {
-                        rangeInput[1].value = maxPrice;
-                        range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
-                    }
-                    @this.emit('priceRange', minPrice + '_' + maxPrice);
-                }
-            });
-        });
-        rangeInput.forEach(input => {
-            input.addEventListener("input", e => {
-                let minVal = parseInt(rangeInput[0].value),
-                    maxVal = parseInt(rangeInput[1].value);
-                if ((maxVal - minVal) < priceGap) {
-                    if (e.target.className === "range-min") {
-                        rangeInput[0].value = maxVal - priceGap
-                    } else {
-                        rangeInput[1].value = minVal + priceGap;
-                    }
-                } else {
-                    priceInput[0].value = minVal;
-                    priceInput[1].value = maxVal;
-                    console.log(minVal);
-                    console.log(maxVal);
-                    range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
-                    range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
-                    @this.emit('priceRange', minVal + '_' + maxVal);
-                }
+        $(document).ready(function() {
+            $('.productslider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 2000,
+                prevArrow: '<button class="slick-prev">&#10094;</button>',
+                nextArrow: '<button class="slick-next">&#10095;</button>',
             });
         });
     </script>

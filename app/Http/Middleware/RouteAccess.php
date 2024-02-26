@@ -25,8 +25,12 @@ class RouteAccess
 
         if (Auth::check() && Auth::user()->id == 1) {
             return $next($request);
+        } elseif (!Auth::check() && $request->is('admin')) {
+            return redirect('/');
+        } elseif (Auth::check() && !$request->is('admin/*')) {
+            return $next($request);
         } else {
-            if ($request->is('shop/*')  || $request->is('/') || $request->is('login') || $request->is('register') || $request->is('logout')) {
+            if ($request->is('shop/*')  || $request->is('/') || $request->is('login') || $request->is('register') || $request->is('logout') || $request->is('search/*')) {
 
                 return  $next($request);
             } elseif (Auth::check()) {

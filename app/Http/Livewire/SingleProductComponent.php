@@ -5,6 +5,8 @@ namespace App\Http\Livewire;
 use Livewire\WithFileUploads;
 use App\Models\Product;
 use App\Models\Cart;
+use App\Models\Pincode;
+use App\Models\ProductImage;
 use App\Models\Wishlist;
 use App\Models\ReviewLike;
 use App\Models\Size;
@@ -27,9 +29,15 @@ class SingleProductComponent extends Component
     public $review_id;
     public $ring_size;
     public $product_size_id;
+    public $productImages = [];
+    public $productImage = [];
+    public $color_id;
+    public $pincode;
+
     public function mount($product)
     {
         $this->product = $product;
+        $this->color_id = 'y';
     }
 
     public function addToWishlist($productId)
@@ -186,6 +194,23 @@ class SingleProductComponent extends Component
     {
         $this->product_id = $product_id;
         $this->dispatchBrowserEvent('livewireOpenModal');
+    }
+    function closeModal()
+    {
+        $this->dispatchBrowserEvent('livewireCloseModal');
+    }
+
+    public function pincode()
+    {
+        $this->validate([
+            'pincode' => 'required|digits:6|integer',
+        ]);
+        $pincodes = Pincode::where('pincode', $this->pincode)->get();
+        if (count($pincodes) == 0) {
+            session()->flash('notverify', 'This pincode is not available for delivery.');
+        } else {
+            session()->flash('verify', 'This pincode is available for delivery.');
+        }
     }
 
     public function render()

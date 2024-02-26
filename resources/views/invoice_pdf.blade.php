@@ -105,22 +105,25 @@
                 <p class="mb-1 fontsize">{{ $order->billingAddress->first_name ?? '' }}
                     {{ $order->billingAddress->last_name ?? '' }}</p>
                 {{ $order->billingAddress->address_line1 ?? '' }}
-                {{ $order->billingAddress->city ?? '' }},
-                {{ $order->billingAddress->state ?? '' }},
+                {{ $order->billingAddress->cities->name ?? '' }},
+                {{ $order->billingAddress->states->name ?? '' }}-
                 {{ $order->billingAddress->pin ?? '' }},
-                {{ $order->billingAddress->country ?? '' }}
+                {{ $order->billingAddress->countries->name ?? '' }}
                 <br>
-                mobile-
+                Mobile-
                 {{ $order->billingAddress->phone ?? '' }}
             </td>
             <td colspan="3">
                 <p class="mb-1 fontsize">{{ $order->shippingAddress->first_name ?? '' }}
                     {{ $order->shippingAddress->last_name ?? '' }}</p>
-                {{ $order->shippingAddress->address_line1 ?? '' }},
+                {{ $order->shippingAddress->address_line1 ?? '' }}
+                {{ $order->shippingAddress->cities->name ?? '' }},
+                {{ $order->shippingAddress->states->name ?? '' }}-
                 {{ $order->shippingAddress->pin ?? '' }},
-                {{ $order->shippingAddress->country ?? '' }} <br>
-                mobile-
-                {{ $order->billingAddress->phone ?? '' }}
+                {{ $order->shippingAddress->countries->name ?? '' }}
+                <br>
+                Mobile-
+                {{ $order->shippingAddress->phone ?? '' }}
             </td>
         </tr>
     </table>

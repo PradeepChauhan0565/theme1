@@ -650,6 +650,9 @@ class CheckoutComponent extends Component
     public function render()
     {
         // dd(ContactDetails::first());
+        $this->countries = Country::all();
+        $this->states  = State::where('country_id', $this->shipping_country)->get();
+        $this->cities = City::where('state_id', $this->shipping_state)->get();
         $this->cartItems = Cart::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->get();
         $this->sub_total = 0;
         $this->total = 0;

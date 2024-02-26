@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Orders</h3>
+                    <h3 class="card-title">Orders ( {{ count($orders) }} )</h3>
 
                     <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 250px;">
@@ -37,12 +37,12 @@
                                 </div>
 
                                 <div> <select class="border p-1" wire:model="orderstatus" wire:change="filterChange">
-                                        <option> Search by status</option>
+                                        <option value=""> Search by status</option>
                                         <option value="1"> Pending</option>
-                                        <option value="4">In Process</option>
-                                        <option value="7">Shipped</option>
-                                        <option value="2">Delivered</option>
-                                        <option value="3">Cancelled</option>
+                                        <option value="2">In Process</option>
+                                        <option value="3">Shipped</option>
+                                        <option value="4">Delivered</option>
+                                        <option value="6">Cancelled</option>
                                     </select>
                                 </div>
                             </div>
@@ -131,18 +131,9 @@
                                                                                     }
 
                                                                                 @endphp
-                                                                                {{-- @if ($item->product)
-                                                                                        @foreach ($item->product->images->where('colorType', $o_color) as $item1)
-                                                                                            @if ($ctr == 1)
-                                                                                                <img style="width:120px"
-                                                                                                    src="{{ asset('public/storage/' . $item1->url) }}"
-                                                                                                    alt="{{ $item1->sku }}">
-                                                                                            @endif
-                                                                                            @php
-                                                                                                $ctr++;
-                                                                                            @endphp
-                                                                                        @endforeach
-                                                                                    @endif --}}
+                                                                                <img style="width:120px"
+                                                                                    src="{{ asset('storage/' . $item->product->image_url ?? '') }}"
+                                                                                    alt="{{ $item->product->sku ?? '' }}">
                                                                                 <div>
                                                                                     {{ $item->product->name ?? '' }}
                                                                                 </div>
@@ -166,7 +157,7 @@
                                             <i class="fas fa-rupee-sign" style="font-size: 12px;"></i>
                                             {{ $order->amount - $order->discount_amount }}
                                         </td>
-                                        <td>
+                                        <td style="width:150px;">
                                             @php
                                                 $address = App\Models\Address::where('user_id', $order->user_id)
                                                     ->where('address_type', 1)
@@ -175,9 +166,9 @@
                                             <b>{{ $order->user->name ?? '' }}</b>
                                             <br>
                                             {{ $address->address_line1 ?? '' }}
-                                            {{ $address->city ?? '' }}, {{ $address->state ?? '' }},
+                                            {{ $address->cities->name ?? '' }}, {{ $address->states->name ?? '' }}-
                                             {{ $address->pin ?? '' }}<br>
-                                            {{ $address->country ?? '' }}<br>
+                                            {{ $address->countries->name ?? '' }}<br>
                                             {{ $address->phone ?? '' }}
 
 
@@ -206,7 +197,8 @@
                                             <div class="mainolhead1">
 
                                                 <select wire:model="status.{{ $order->id }}"
-                                                    wire:change="statusChange({{ $order->id }})" class="border p-1">
+                                                    wire:change="statusChange({{ $order->id }})"
+                                                    class="border p-1">
                                                     <option value="1"> Pending</option>
                                                     <option value="2">In Process </option>
                                                     <option value="3">Shipped</option>
@@ -216,11 +208,10 @@
                                             </div>
                                         </td>
                                         <td>
-                                            {{-- <button class="border p-1"
-                                                        style="background-color: #00263a; color:white; ">
-                                                        <a style="text-decoration:none" target="_blank"
-                                                            href="{{ route('invoice', [$order->id]) }}">Invoice</a>
-                                                    </button> --}}
+                                            <button class="border p-1" style="background-color: #00263a; ">
+                                                <a style="text-decoration:none; color:white; "
+                                                    href="{{ route('invoice', [$order->id]) }}">Invoice</a>
+                                            </button>
                                             <button class="border px-2"
                                                 wire:click="editModal({{ $order->id }})"style="background-color: green; color:white; padding:2.6px;">
                                                 Update Track
@@ -255,7 +246,7 @@
 
             </div>
             <!-- /.card -->
-            {{-- {{$urls->links()}} --}}
+            {{ $orders->links() }}
         </div>
     </div>
 

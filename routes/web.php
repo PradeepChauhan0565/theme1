@@ -69,6 +69,7 @@ Route::get('/hello', [HomeController::class, 'hello'])->name('hello');
 Route::get('/shop/{category}/{style?}/{subCategory?}', [ProductController::class, 'producFront'])->name('products');
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('recently-viewed', [ProductController::class, 'recentView'])->name('recent-view');
+Route::get('/image/{id}/{cid}', [ProductController::class, 'singleImage']);
 Route::get('wishlist', [WishlistController::class, 'wishList'])->name('wishlists');
 Route::get('cart', [CartController::class, 'cart'])->name('cart');
 Route::get('/cart/checkout', [CheckoutController::class, 'checkout'])->name('checkout');

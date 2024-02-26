@@ -3,6 +3,9 @@
 namespace App\Http\Livewire\Component;
 
 use App\Models\Address;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\State;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -16,7 +19,7 @@ class ProfileComponent extends Component
     public $shipping_postcode;
     public $shipping_city;
     public $shipping_state;
-    public $shipping_country = 233;
+    public $shipping_country;
     public $countries = [];
     public $states = [];
     public $cities = [];
@@ -26,6 +29,7 @@ class ProfileComponent extends Component
     {
         $this->action = $edit;
         $address = Address::where('user_id', $userId)->where('address_type', 1)->first();
+        // dd($address);
         $this->shipping_address = $address->address_line1 ?? '';
         $this->shipping_first_name = $address->first_name ?? '';
         $this->shipping_last_name = $address->last_name ?? '';
@@ -59,9 +63,11 @@ class ProfileComponent extends Component
         ]);
         return back()->with('success', 'Address updated successfully!');
     }
-
     public function render()
     {
-        return view('livewire.component.profile-component');
+        $this->states  = State::where('country_id', $this->shipping_country)->get();
+        $this->cities = City::where('state_id', $this->shipping_state)->get();
+        $country = Country::all();
+        return view('livewire.component.profile-component', compact('country'));
     }
 }

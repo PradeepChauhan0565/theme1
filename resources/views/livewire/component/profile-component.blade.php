@@ -89,11 +89,11 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                         <div>
-                            <select class="addressInput" wire:change="CountryChange" name="shipping_country"
-                                style="" class="crs-country" data-region-id="shipping-crs"
-                                wire:model="shipping_country" placeholder="country" data-crs-loaded="true">
-                                <option value="">Select country</option>
-                                @foreach ($countries as $country)
+                            <select class="addressInput" name="shipping_country" class="crs-country"
+                                data-region-id="shipping-crs" wire:model="shipping_country" placeholder="country"
+                                data-crs-loaded="true">
+                                <option value="">Select Country</option>
+                                @foreach ($country as $country)
                                     <option value="{{ $country->id }}">{{ $country->name }}</option>
                                 @endforeach
                             </select>
@@ -102,15 +102,15 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                         <div class="demo3 d-flex gap-2">
-                            <select name="shipping_state" class="addressInput" id="shipping-crs"
-                                wire:model="shipping_state" placeholder="State">
-                                <option value="">Select region</option>
+                            <select name="shipping_state" class="addressInput" data-region-id="shipping-crs"
+                                wire:model="shipping_state" placeholder="State" data-crs-loaded="true">
+                                <option value="">Select Region</option>
                                 @foreach ($states as $state)
                                     <option value="{{ $state->id }}">{{ $state->name }}</option>
                                 @endforeach
                             </select>
-                            <select name="shipping_city" class="addressInput" id="shipping-crs"
-                                wire:model="shipping_city" placeholder="State">
+                            <select name="shipping_city" class="addressInput" data-region-id="shipping-crs"
+                                wire:model="shipping_city" placeholder="City">
                                 <option value="">Select City</option>
                                 @foreach ($cities as $city)
                                     <option value="{{ $city->id }}">{{ $city->name }}</option>

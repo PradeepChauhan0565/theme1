@@ -4,7 +4,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+
+    <style>
+        #image-upload-button {
+            width: 100%;
+            height: 70px;
+            background: rgb(221, 218, 218);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    </style>
+
     @if ($action == 'add_new' || $action == 'edit')
+
         <div class="border p-2">
             <div class="d-flex justify-content-end mb-2">
                 <button class=" btn-secondary border-0" wire:click="back"><i class="fas fa-arrow-left"></i></button>
@@ -302,7 +316,7 @@
                                         <select wire:model="diamondSetting_id" id=""
                                             class="w-100 py-1 px-2 border rounded">
                                             <option value="">Select Diamond Setting</option>
-                                            @foreach ($diamondSettings as $item)
+                                            @foreach ($settings as $item)
                                                 <option value="{{ $item->id }}" class="text-capitalize ">
                                                     {{ $item->code }}</option>
                                             @endforeach
@@ -315,7 +329,7 @@
                                         <select wire:model="colorStoneSetting_id" id=""
                                             class="w-100 py-1 px-2 border rounded">
                                             <option value="">Select Setting</option>
-                                            @foreach ($colorStoneSettings as $item)
+                                            @foreach ($settings as $item)
                                                 <option value="{{ $item->id }}" class="text-capitalize ">
                                                     {{ $item->code }}</option>
                                             @endforeach
@@ -337,9 +351,9 @@
                                 @endif
                                 @if ($material_type_id == 2)
                                     <div class="col-lg-6 mb-2">
-                                        <label for="Matal weight">Matal Weight</label>
+                                        <label for="metal weight">Metal Weight</label>
                                         <input wire:model="metalWeight" type="text" class="form-control"
-                                            placeholder="Matal Weight">
+                                            placeholder="Metal Weight">
                                     </div>
                                 @endif
                                 @if ($material_type_id == 3)
@@ -421,6 +435,9 @@
                         </div>
                         <div class="tab-pane fade p-2" id="v-pills-settings" role="tabpanel"
                             aria-labelledby="v-pills-settings-tab" wire:ignore.self>
+                            @php
+                                $product = App\Models\Product::find($pt_id);
+                            @endphp
                             <div class="row g-3">
 
                                 <div class="col-lg-6 mb-2">
@@ -459,16 +476,19 @@
                                                                 class="fas fa-times text-danger"></i></button>
                                                         <div
                                                             class="form-check position-absolute top-0 left-0  bg-transparent">
-                                                            <input
-                                                                wire:change="isMainImageChange({{ $image->id }})"
-                                                                wire:model="is_main_image.{{ $image->id }}"
-                                                                class="form-check-input" type="checkbox"
-                                                                value="" id="flexCheckDefault" checked>
+                                                            <div class="form-check">
+                                                                <input wire:ignore
+                                                                    wire:change="isMainImageChange({{ $image->id }})"
+                                                                    class="form-check-input" type="checkbox"
+                                                                    @if ($product->image_url == $image->url) checked @endif>
+                                                                {{-- wire:model="is_main_image.{{ $image->id }}" --}}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             @endforeach
                                         </div>
+
                                     @endif
                                     @error('whiteImages')
                                         <span style="color:red">{{ $message }}</span>
@@ -535,9 +555,8 @@
                                                             class="form-check position-absolute top-0 left-0  bg-transparent">
                                                             <input
                                                                 wire:change="isMainImageChange({{ $image->id }})"
-                                                                wire:model="is_main_image.{{ $image->id }}"
                                                                 class="form-check-input" type="checkbox"
-                                                                value="" id="flexCheckDefault" checked>
+                                                                @if ($product->image_url == $image->url) checked @endif>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -610,10 +629,8 @@
                                                             class="form-check position-absolute top-0 left-0  bg-transparent">
                                                             <input
                                                                 wire:change="isMainImageChange({{ $image->id }})"
-                                                                wire:model="is_main_image.{{ $image->id }}"
                                                                 class="form-check-input" type="checkbox"
-                                                                value="" id="flexCheckDefault" checked>
-
+                                                                @if ($product->image_url == $image->url) checked @endif>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -664,8 +681,7 @@
                 <div class="card">
 
                     <div class="card-header " style="overflow: auto;">
-                        <h3 class="card-title"> Products</h3>
-
+                        <h3 class="card-title"> Products( {{ count($products) }} )</h3>
                         <div class="card-tools ">
                             <div class="input-group input-group-sm" style="width: 250px;">
                                 <input wire:model="search" type="text" name="table_search"
@@ -692,15 +708,13 @@
                         <table class=" table-hover text-nowrap">
                             <thead>
                                 <tr>
-                                    <th wire:click="sort('category_id')" style="cursor: pointer">
-                                        Sku <i class="fas fa-sort"></i>
-                                    </th>
-                                    <th wire:click="sort('category_id')" style="cursor: pointer">
-                                        Name <i class="fas fa-sort"></i>
-                                    </th>
-                                    <th wire:click="sort('category_id')" style="cursor: pointer">
-                                        Regular Price <i class="fas fa-sort"></i>
-                                    </th>
+                                    <th> Sr No. </th>
+                                    <th> Sku </th>
+                                    <th> Name </th>
+                                    <th> Category </th>
+                                    <th> Category Type </th>
+                                    <th> Sub Category </th>
+                                    <th> Regular Price </th>
                                     <th wire:click="sort('categorytype_id')" style="cursor: pointer">Sale Price<i
                                             class="fas fa-sort"></i>
                                     </th>
@@ -718,8 +732,27 @@
                             <tbody>
                                 @foreach ($products as $item)
                                     <tr>
+                                        <td class="text-capitalize">
+                                            {{ ($products->currentpage() - 1) * $products->perpage() + $loop->index + 1 }}
+                                        </td>
                                         <td class="text-capitalize">{{ $item->sku }}</td>
                                         <td class="text-capitalize">{{ $item->name ?? '' }}</td>
+                                        <td class="text-capitalize">
+                                            @foreach ($item->categories as $category)
+                                                {{ $category->name ?? '' }}
+                                            @endforeach
+                                        </td>
+                                        <td class="text-capitalize">
+                                            @foreach ($item->categoryTypes as $categoryType)
+                                                {{ $categoryType->name ?? '' }}
+                                            @endforeach
+                                        </td>
+                                        <td class="text-capitalize">
+                                            @foreach ($item->subSategories as $subCategory)
+                                                {{ $subCategory->name ?? '' }}
+                                            @endforeach
+                                        </td>
+
                                         <td class="text-capitalize">{{ $item->regular_price }}
                                         </td>
                                         <td class="text-capitalize">{{ $item->sale_price }}</td>
@@ -759,7 +792,7 @@
 
                 </div>
                 <!-- /.card -->
-
+                {{ $products->links() }}
             </div>
         </div>
     @endif
@@ -800,21 +833,7 @@
             </div>
         </div>
     </div>
-    <style>
-        #image-upload-button {
-            width: 100%;
-            height: 70px;
-            background: rgb(221, 218, 218);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
 
-        /* ::-webkit-file-upload-button {
-            visibility: hidden;
-        } */
-    </style>
     {{-- import model --}}
     <div wire:ignore.self class="modal fade" id="exampleModalImoprt" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalLabel" aria-hidden="true">

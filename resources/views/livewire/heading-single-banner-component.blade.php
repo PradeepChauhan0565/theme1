@@ -154,9 +154,15 @@
                                     <img style="width:100px" src="{{ $banner_image->temporaryUrl() }}">
                                 @elseif($old_banner_image)
                                     Old Image:
-                                    <img style="width: 100px;"
-                                        src="{{ asset('storage/singlebanner/' . $old_banner_image) }}"
-                                        alt="">
+                                    <div class="position-relative m-2">
+                                        <img style="width: 100px;"
+                                            src="{{ asset('storage/singlebanner/' . $old_banner_image) }}"
+                                            alt="">
+                                        <div class="position-absolute"
+                                            style="top:2px; right:5px; cursor:pointer; color:red" title="Remove"
+                                            wire:click.prevent="removeoldImage()"><i class="fas fa-times"></i>
+                                        </div>
+                                    </div>
                                 @endif
                                 @error('banner_image')
                                     <span style="color:red">{{ $message }}</span>

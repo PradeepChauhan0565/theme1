@@ -41,52 +41,56 @@ class AppServiceProvider extends ServiceProvider
         $events->listen(BuildingMenu::class, function (BuildingMenu $event) {
 
             $urls = [];
-            $menus = Menu::orderBy('order_by', 'asc')->get();
-            $urls = url::whereIn(
-                'id',
-                RoleUrl::whereIn(
-                    'role_id',
-                    User::find(Auth::user()->id)->roles->pluck('id')
-                )->pluck('url_id')
-            )
-                ->where('deleted_at', null)
-                ->orderBy('created_at', 'asc')
-                ->get();
+            if (Auth::check()) {
 
-            foreach ($menus as $menu) {
-                $arrayMenu = [];
-                if (count($urls->where('menu_id', $menu->id)) > 0) {
-                    foreach ($urls->where('menu_id', $menu->id) as $url) {
-                        $arrayMenu[] = array(
-                            'text' =>  $url->text,
-                            'url' => $menu->url . '/' . $url->url,
-                            'icon' => $url->icon
-                        );
-                    }
-                    foreach ($urls as $url) {
 
-                        if ($url->menu_id == null) {
-                            $event->menu->add([
-                                'text' => $url->text,
-                                'url' => $url->url,
-                                'icon' => $url->icon,
-                            ]);
+                $menus = Menu::orderBy('order_by', 'asc')->get();
+                $urls = url::whereIn(
+                    'id',
+                    RoleUrl::whereIn(
+                        'role_id',
+                        Auth::check() ?  User::find(Auth::user()->id)->roles->pluck('id') : []
+                    )->pluck('url_id')
+                )
+                    ->where('deleted_at', null)
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+
+                foreach ($menus as $menu) {
+                    $arrayMenu = [];
+                    if (count($urls->where('menu_id', $menu->id)) > 0) {
+                        foreach ($urls->where('menu_id', $menu->id) as $url) {
+                            $arrayMenu[] = array(
+                                'text' =>  $url->text,
+                                'url' => $menu->url . '/' . $url->url,
+                                'icon' => $url->icon
+                            );
                         }
-                    }
-                    $event->menu->add([
-                        'text' => $menu->text,
-                        'url' => $menu->url,
-                        'icon' => $menu->icon,
-                        'submenu' => $arrayMenu,
-                    ]);
-                } else {
-                    $roles = User::find(Auth::user()->id)->roles->pluck('id')->toArray();
-                    if (($menu->url && $menu->url != '#') || in_array(1, $roles)) {
+                        foreach ($urls as $url) {
+
+                            if ($url->menu_id == null) {
+                                $event->menu->add([
+                                    'text' => $url->text,
+                                    'url' => $url->url,
+                                    'icon' => $url->icon,
+                                ]);
+                            }
+                        }
                         $event->menu->add([
                             'text' => $menu->text,
                             'url' => $menu->url,
                             'icon' => $menu->icon,
+                            'submenu' => $arrayMenu,
                         ]);
+                    } else {
+                        $roles = User::find(Auth::user()->id)->roles->pluck('id')->toArray();
+                        if (($menu->url && $menu->url != '#') || in_array(1, $roles)) {
+                            $event->menu->add([
+                                'text' => $menu->text,
+                                'url' => $menu->url,
+                                'icon' => $menu->icon,
+                            ]);
+                        }
                     }
                 }
             }

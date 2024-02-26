@@ -9,7 +9,18 @@ use Illuminate\Support\Facades\Auth;
 class Address extends Model
 {
     use HasFactory;
-
+    public function countries()
+    {
+        return $this->belongsTo(Country::class, 'country', 'id');
+    }
+    public function states()
+    {
+        return $this->belongsTo(State::class, 'state', 'id');
+    }
+    public function cities()
+    {
+        return $this->belongsTo(City::class, 'city', 'id');
+    }
 
     protected $guarded = [];
 

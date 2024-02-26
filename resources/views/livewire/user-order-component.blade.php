@@ -36,7 +36,7 @@
                         <div class="row mb-4 " style="">
                             <div class="col-lg-12 " style="overflow-x:auto;">
                                 @if (count($orders) > 0)
-                                    <table class="table" style="min-width: 1100px;">
+                                    <table class="table" style="min-width: 1150px;">
                                         <thead>
                                             <tr style="background-color:#071d49;">
                                                 <th scope="col">Sr No</th>
@@ -182,16 +182,16 @@
                                                             @if ($order->status_id == 1)
                                                                 Order has been placed
                                                             @endif
-                                                            @if ($order->status_id == 7)
+                                                            @if ($order->status_id == 3)
                                                                 Order has been shipped
                                                             @endif
-                                                            @if ($order->status_id == 2)
+                                                            @if ($order->status_id == 4)
                                                                 Order has been delivered
                                                             @endif
-                                                            @if ($order->status_id == 3)
+                                                            @if ($order->status_id == 6)
                                                                 Order has been cancelled
                                                             @endif
-                                                            @if ($order->status_id == 4)
+                                                            @if ($order->status_id == 2)
                                                                 Item is being manufactured
                                                             @endif
                                                         </div><br>
